@@ -1,1 +1,194 @@
-<p>home-god works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2><i class="bi bi-speedometer2"></i>Kontrol Panela</h2>
+      <p>Ongi etorri sistemara. Hemen duzu zure erabiltzaileen kudeaketa.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="icon-circle">
+            <i class="bi bi-mortarboard-fill"></i>
+          </div>
+          <h5>Ikasleak</h5>
+          <h2>{{ studentCount }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="icon-circle">
+            <i class="bi bi-person-video3"></i>
+          </div>
+          <h5>Irakasleak</h5>
+          <h2>{{ teacherCount }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="icon-circle">
+            <i class="bi bi-calendar-event-fill"></i>
+          </div>
+          <h5>Gaurko Bilerak</h5>
+          <h2>{{ todayMeetings }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showForm" class="card form-card">
+    <div class="card-header">
+      <h5>
+        <i class="bi" [ngClass]="isEditing ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
+        {{ isEditing ? 'Erabiltzailea Editatu' : 'Erabiltzaile Berria Sortu' }}
+      </h5>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md-6">
+            <label>Erabiltzailea</label>
+            <input
+              type="text"
+              [(ngModel)]="userForm.username"
+              name="username"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label>Email</label>
+            <input
+              type="email"
+              [(ngModel)]="userForm.email"
+              name="email"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label>Izena</label>
+            <input
+              type="text"
+              [(ngModel)]="userForm.nombre"
+              name="nombre"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label>Abizenak</label>
+            <input
+              type="text"
+              [(ngModel)]="userForm.apellidos"
+              name="apellidos"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label>Pasahitza</label>
+            <input
+              type="text"
+              [(ngModel)]="userForm.password"
+              name="password"
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label>Rola</label>
+            <select [(ngModel)]="userForm.role" name="role" required>
+              <option value="student">Ikaslea</option>
+              <option value="teacher">Irakaslea</option>
+              <option value="admin">Administratzailea</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" (click)="cancelForm()">
+            Utzi
+          </button>
+          <button type="submit">Gorde</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-people-fill"></i>Erabiltzaileen Kudeaketa</h5>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input
+              type="text"
+              placeholder="Bilatu erabiltzailea..."
+              [(ngModel)]="searchTerm"
+              (input)="filterUsers()"
+            />
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Erabiltzailea</th>
+                  <th>Izena / Abizenak</th>
+                  <th>Rola</th>
+                  <th>Ekintzak</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of filteredUsers">
+                  <td>
+                    <div class="user-info">
+                      <div class="avatar-circle">{{ user.nombre.charAt(0) }}</div>
+                      <div>
+                        <div>{{ user.username }}</div>
+                        <div>{{ user.email }}</div>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>{{ user.nombre }} {{ user.apellidos }}</td>
+
+                  <td>
+                    <span>{{ user.role | uppercase }}</span>
+                  </td>
+
+                  <td>
+                    <button (click)="openEditForm(user)" title="Editatu">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      (click)="onDeleteUser(user.id)"
+                      [disabled]="user.role === 'god' || user.role === 'admin'"
+                      title="Ezabatu"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div *ngIf="filteredUsers.length === 0">
+              Ez da erabiltzailerik aurkitu.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

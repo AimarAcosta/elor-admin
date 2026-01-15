@@ -8,8 +8,8 @@ import { Footer } from './shared/footer/footer';
   standalone: true,
   imports: [RouterOutlet, Navbar, Footer],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
 })
-export class AppComponent {
+export class App {
   title = 'ElorAdmin';
 }

@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
 export interface User {
+  id: number;
   username: string;
   password: string;
+  nombre: string;
+  apellidos: string;
   role: 'god' | 'admin' | 'teacher' | 'student';
-  name: string;
+  email: string;
   photo?: string;
 }
 
@@ -14,10 +17,42 @@ export interface User {
 })
 export class UsersService {
   private users: User[] = [
-    { username: 'god', password: 'god', role: 'god', name: 'Super Admin', photo: 'unknown.jpg' },
-    { username: 'admin', password: '123', role: 'admin', name: 'Idazkaria 1', photo: 'pepito.jpg' },
-    { username: 'prof', password: '123', role: 'teacher', name: 'Irakasle 1', photo: 'prof1.jpg' },
-    { username: 'alum', password: '123', role: 'student', name: 'Ikasle 1', photo: 'alum1.jpg' },
+    {
+      id: 1,
+      username: 'goduser',
+      password: '123456',
+      nombre: 'God',
+      apellidos: 'Admin',
+      email: 'god@elorrieta.com',
+      role: 'god',
+    },
+    {
+      id: 2,
+      username: 'adminuser',
+      password: '123456',
+      nombre: 'Admin',
+      apellidos: 'User',
+      email: 'admin@elorrieta.com',
+      role: 'admin',
+    },
+    {
+      id: 3,
+      username: 'profesor1',
+      password: '123456',
+      nombre: 'Roman',
+      apellidos: 'Lopez',
+      email: 'prof1@elorrieta.com',
+      role: 'teacher',
+    },
+    {
+      id: 7,
+      username: 'alumno1',
+      password: '123456',
+      nombre: 'Oscar',
+      apellidos: 'Lopez',
+      email: 'alum1@elorrieta.com',
+      role: 'student',
+    },
   ];
 
   constructor() {}
@@ -30,4 +65,41 @@ export class UsersService {
   getUsers(): User[] {
     return this.users;
   }
+
+  deleteUser(id: number): boolean {
+    const userIndex = this.users.findIndex((u) => u.id === id);
+    if (userIndex === -1) return false;
+
+    const user = this.users[userIndex];
+
+    if (user.role === 'god' || user.role === 'admin') {
+      console.warn('No puedes borrar a un administrador o dios.');
+      console.warn('Ezin duzu administratzaile edo god bat ezabatu.');
+      return false;
+    }
+
+    this.users.splice(userIndex, 1);
+    return true;
+  }
+
+  createUser(user: User): void {
+    const newId = Math.max(...this.users.map(u => u.id)) + 1;
+    user.id = newId;
+    
+    if (!user.photo) {
+      user.photo = 'unknown.jpg'; 
+    }
+    
+    this.users.push(user);
+  }
+
+  updateUser(updatedUser: User): boolean {
+    const index = this.users.findIndex(u => u.id === updatedUser.id);
+    if (index !== -1) {
+      this.users[index] = updatedUser;
+      return true;
+    }
+    return false;
+  }
 }
+

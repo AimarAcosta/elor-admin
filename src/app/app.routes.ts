@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './services/auth.guard'; 
+import { authGuard } from './services/auth.guard';
 
 import { Login } from './pages/login/login';
 import { HomeGod } from './pages/home-god/home-god';
@@ -9,39 +9,39 @@ import { HomeStudent } from './pages/home-student/home-student';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  
-  { 
-    path: 'login', 
-    component: Login
+
+  {
+    path: 'login',
+    component: Login,
   },
 
-  { 
-    path: 'god', 
+  {
+    path: 'god',
     component: HomeGod,
     canActivate: [authGuard],
-    data: { role: 'god' } 
+    data: { role: 'god' },
   },
 
-  { 
-    path: 'admin', 
+  {
+    path: 'admin',
     component: HomeAdmin,
     canActivate: [authGuard],
-    data: { role: 'admin' }
+    data: { role: 'admin' },
   },
 
-  { 
-    path: 'teacher', 
+  {
+    path: 'teacher',
     component: HomeTeacher,
     canActivate: [authGuard],
-    data: { role: 'teacher' }
+    data: { role: 'teacher' },
   },
 
-  { 
-    path: 'student', 
+  {
+    path: 'student',
     component: HomeStudent,
     canActivate: [authGuard],
-    data: { role: 'student' }
+    data: { role: 'student' },
   },
 
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];
