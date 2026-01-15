@@ -1,1 +1,52 @@
-<p>login works!</p>
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <img src="logo.jpg" alt="Elorrieta Logo" class="login-logo" />
+      <h3>ElorAdmin</h3>
+    </div>
+
+    <form (ngSubmit)="onLogin()">
+      <div class="form-group">
+        <label for="username">Erabiltzailea</label>
+        <div class="input-with-icon">
+          <span class="icon"><i class="bi bi-person-fill"></i></span>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            [(ngModel)]="username"
+            name="username"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Pasahitza</label>
+        <div class="input-with-icon">
+          <span class="icon"><i class="bi bi-lock-fill"></i></span>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            [(ngModel)]="password"
+            name="password"
+            required
+          />
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-box">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-submit">Sartu</button>
+    </form>
+
+    <div class="login-footer">
+      <p>pass: 123456</p>
+      <p>goduser | adminuser | profesor1 | alumno1</p>
+    </div>
+  </div>
+</div>
