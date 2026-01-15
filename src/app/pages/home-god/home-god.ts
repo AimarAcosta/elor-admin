@@ -13,20 +13,17 @@ import { MeetingsService } from '../../services/meetings';
 })
 export class HomeGod implements OnInit {
   
-  // KPIs
   studentCount: number = 0;
   teacherCount: number = 0;
   todayMeetings: number = 0;
 
-  // Listas
   users: User[] = [];
   filteredUsers: User[] = [];
   searchTerm: string = '';
 
-  // Variables para el Formulario (Crear/Editar)
-  showForm: boolean = false; // ¿Se ve el formulario?
-  isEditing: boolean = false; // ¿Estamos editando o creando?
-  userForm: User = this.getEmptyUser(); // Datos del formulario
+  showForm: boolean = false; 
+  isEditing: boolean = false; 
+  userForm: User = this.getEmptyUser(); 
 
   constructor(
     private usersService: UsersService,
@@ -39,32 +36,25 @@ export class HomeGod implements OnInit {
 
   loadData() {
     this.users = this.usersService.getUsers();
-    this.filterUsers(); // Aplicar filtro si lo hubiera
+    this.filterUsers(); 
     
-    // Recalcular contadores
     this.studentCount = this.users.filter(u => u.role === 'student').length;
     this.teacherCount = this.users.filter(u => u.role === 'teacher').length;
     this.todayMeetings = this.meetingsService.getTodayMeetingsCount();
   }
 
-  // --- LÓGICA DEL FORMULARIO ---
-
-  // Botón "Crear Nuevo"
   openCreateForm() {
     this.isEditing = false;
-    this.userForm = this.getEmptyUser(); // Limpiar formulario
+    this.userForm = this.getEmptyUser(); 
     this.showForm = true;
   }
 
-  // Botón "Editar" (en la tabla)
   openEditForm(user: User) {
     this.isEditing = true;
-    // Copiamos el usuario para no modificar la tabla directamente mientras escribimos (Clonación)
     this.userForm = { ...user }; 
     this.showForm = true;
   }
 
-  // Botón "Guardar" del formulario
   onSubmit() {
     if (this.isEditing) {
       this.usersService.updateUser(this.userForm);
@@ -72,33 +62,28 @@ export class HomeGod implements OnInit {
       this.usersService.createUser(this.userForm);
     }
     
-    // Cerrar y recargar
     this.showForm = false;
     this.loadData();
   }
 
-  // Botón "Cancelar"
   cancelForm() {
     this.showForm = false;
   }
 
-  // Auxiliar: Usuario vacío
   getEmptyUser(): User {
     return {
       id: 0,
       username: '',
-      password: '123', // Password por defecto
+      password: '123', 
       nombre: '',
       apellidos: '',
       email: '',
-      role: 'student' // Rol por defecto
+      role: 'student' 
     };
   }
 
-  // --- LÓGICA EXISTENTE ---
-
   onDeleteUser(id: number) {
-    if (confirm('¿Estás seguro de que quieres eliminar este usuario?')) {
+    if (confirm('¿Erabiltzaile hau ezabatu nahi duzu?')) {
       const success = this.usersService.deleteUser(id);
       if (success) {
         this.loadData();

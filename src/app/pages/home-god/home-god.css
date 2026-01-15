@@ -437,6 +437,17 @@ span {
   font-weight: 600;
 }
 
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.header-actions button {
+  padding: 10px 16px;
+  white-space: nowrap;
+}
+
 @media (max-width: 768px) {
   .row {
     flex-direction: column;

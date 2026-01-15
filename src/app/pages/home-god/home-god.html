@@ -54,52 +54,27 @@
         <div class="row">
           <div class="col-md-6">
             <label>Erabiltzailea</label>
-            <input
-              type="text"
-              [(ngModel)]="userForm.username"
-              name="username"
-              required
-            />
+            <input type="text" [(ngModel)]="userForm.username" name="username" required />
           </div>
 
           <div class="col-md-6">
             <label>Email</label>
-            <input
-              type="email"
-              [(ngModel)]="userForm.email"
-              name="email"
-              required
-            />
+            <input type="email" [(ngModel)]="userForm.email" name="email" required />
           </div>
 
           <div class="col-md-6">
             <label>Izena</label>
-            <input
-              type="text"
-              [(ngModel)]="userForm.nombre"
-              name="nombre"
-              required
-            />
+            <input type="text" [(ngModel)]="userForm.nombre" name="nombre" required />
           </div>
 
           <div class="col-md-6">
             <label>Abizenak</label>
-            <input
-              type="text"
-              [(ngModel)]="userForm.apellidos"
-              name="apellidos"
-              required
-            />
+            <input type="text" [(ngModel)]="userForm.apellidos" name="apellidos" required />
           </div>
 
           <div class="col-md-6">
             <label>Pasahitza</label>
-            <input
-              type="text"
-              [(ngModel)]="userForm.password"
-              name="password"
-              required
-            />
+            <input type="text" [(ngModel)]="userForm.password" name="password" required />
           </div>
 
           <div class="col-md-6">
@@ -113,9 +88,7 @@
         </div>
 
         <div class="form-actions">
-          <button type="button" (click)="cancelForm()">
-            Utzi
-          </button>
+          <button type="button" (click)="cancelForm()">Utzi</button>
           <button type="submit">Gorde</button>
         </div>
       </form>
@@ -127,14 +100,19 @@
       <div class="card">
         <div class="card-header">
           <h5><i class="bi bi-people-fill"></i>Erabiltzaileen Kudeaketa</h5>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-search"></i></span>
-            <input
-              type="text"
-              placeholder="Bilatu erabiltzailea..."
-              [(ngModel)]="searchTerm"
-              (input)="filterUsers()"
-            />
+          <div class="header-actions">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input
+                type="text"
+                placeholder="Bilatu erabiltzailea..."
+                [(ngModel)]="searchTerm"
+                (input)="filterUsers()"
+              />
+            </div>
+            <button (click)="openCreateForm()" *ngIf="!showForm">
+              <i class="bi bi-plus-lg"></i> Berria
+            </button>
           </div>
         </div>
 
@@ -183,9 +161,7 @@
               </tbody>
             </table>
 
-            <div *ngIf="filteredUsers.length === 0">
-              Ez da erabiltzailerik aurkitu.
-            </div>
+            <div *ngIf="filteredUsers.length === 0">Ez da erabiltzailerik aurkitu.</div>
           </div>
         </div>
       </div>

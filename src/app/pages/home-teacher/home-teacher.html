@@ -1,1 +1,82 @@
-<p>home-teacher works!</p>
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h2><i class="bi bi-calendar-week"></i>Irakaslearen Ordutegia</h2>
+      <p>Ongi etorri, <strong>{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</strong></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-calendar-event"></i>Zure Ordutegia</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="schedule-table">
+              <thead>
+                <tr>
+                  <th>O</th>
+                  <th *ngFor="let day of daysEus">{{ day }}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let row of timeTable; let i = index">
+                  <td class="hour-cell">
+                    {{ i + 1 }}
+                  </td>
+
+                  <td *ngFor="let cell of row" class="schedule-cell">
+                    <div
+                      *ngIf="cell.text"
+                      class="schedule-content"
+                      [ngClass]="'status-' + cell.status"
+                    >
+                      <div class="schedule-icon">
+                        <i *ngIf="cell.type === 'meeting'" class="bi bi-people-fill"></i>
+                        <i *ngIf="cell.text.includes('Guardia')" class="bi bi-shield-check"></i>
+                        <i *ngIf="cell.text.includes('Zaintza')" class="bi bi-shield-check"></i>
+                        <i *ngIf="cell.text.includes('Tutoretza')" class="bi bi-chat-dots"></i>
+                      </div>
+
+                      <span class="schedule-text">{{ cell.text }}</span>
+                      <span class="schedule-subtext" *ngIf="cell.subtext">
+                        {{ cell.subtext }}
+                      </span>
+                    </div>
+
+                    <div *ngIf="!cell.text" class="schedule-empty">
+                      -
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="schedule-legend">
+        <span class="legend-item">
+          <span class="legend-badge status-pending"></span>Onartzeke
+        </span>
+        <span class="legend-item">
+          <span class="legend-badge status-approved"></span>Onartuta
+        </span>
+        <span class="legend-item">
+          <span class="legend-badge status-rejected"></span>Ezeztatuta
+        </span>
+        <span class="legend-item">
+          <span class="legend-badge status-conflict"></span>Gatazka
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
