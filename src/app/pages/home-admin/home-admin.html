@@ -74,10 +74,20 @@
 
           <div class="col-md-6">
             <label>Rola</label>
-            <select [(ngModel)]="userForm.role" name="role" required>
-              <option value="student">Ikaslea</option>
-              <option value="teacher">Irakaslea</option>
+            <select [(ngModel)]="userForm.tipo_id" name="tipo_id" required>
+              <option [value]="3">Irakaslea</option>
+              <option [value]="4">Ikaslea</option>
             </select>
+          </div>
+
+          <div class="col-md-6">
+            <label>DNI</label>
+            <input type="text" [(ngModel)]="userForm.dni" name="dni" />
+          </div>
+
+          <div class="col-md-6">
+            <label>Telefonoa</label>
+            <input type="text" [(ngModel)]="userForm.telefono1" name="telefono1" />
           </div>
         </div>
 
@@ -125,7 +135,7 @@
                 <tr *ngFor="let user of filteredUsers">
                   <td>
                     <div class="user-info">
-                      <div class="avatar-circle">{{ user.nombre.charAt(0) }}</div>
+                      <div class="avatar-circle">{{ user.nombre?.charAt(0) || '?' }}</div>
                       <div>
                         <div>{{ user.username }}</div>
                         <div>{{ user.email }}</div>
@@ -136,11 +146,11 @@
                   <td>{{ user.nombre }} {{ user.apellidos }}</td>
 
                   <td>
-                    <span>{{ user.role | uppercase }}</span>
+                    <span>{{ getRoleName(user.tipo_id) | uppercase }}</span>
                   </td>
 
                   <td>
-                    <ng-container *ngIf="user.role !== 'god' && user.role !== 'admin'">
+                    <ng-container *ngIf="user.tipo_id !== 1 && user.tipo_id !== 2">
                       <button (click)="openEditForm(user)" title="Editatu">
                         <i class="bi bi-pencil"></i>
                       </button>
@@ -148,7 +158,7 @@
                         <i class="bi bi-trash"></i>
                       </button>
                     </ng-container>
-                    <span *ngIf="user.role === 'god' || user.role === 'admin'">
+                    <span *ngIf="user.tipo_id === 1 || user.tipo_id === 2">
                       <i class="bi bi-lock-fill"></i> Babestuta
                     </span>
                   </td>

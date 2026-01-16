@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
-import { ScheduleService } from '../../services/schedule';
-import { MeetingsService, Meeting } from '../../services/meetings';
+import { HorariosService, Horario, WeekDay } from '../../services/schedule';
+import { ReunionesService, Reunion } from '../../services/meetings';
 import { UsersService, User } from '../../services/users';
 
 @Component({
@@ -17,14 +17,14 @@ export class HomeStudent implements OnInit {
 
   timeTable: any[][] = [];
   daysEus = ['ASTELEHENA', 'ASTEARTEA', 'ASTEAZKENA', 'OSTEGUNA', 'OSTIRALA'];
-  days = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES']; // Para mapear datos
+  days: WeekDay[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
   
   currentUser: any;
-  myMeetings: Meeting[] = [];
+  myReuniones: Reunion[] = [];
   teachers: User[] = []; 
 
   showRequestForm: boolean = false;
-  newMeeting: Partial<Meeting> = {
+  newReunion: Partial<Reunion> = {
     titulo: '',
     asunto: '',
     profesor_id: 0
@@ -32,8 +32,8 @@ export class HomeStudent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private scheduleService: ScheduleService,
-    private meetingsService: MeetingsService,
+    private horariosService: HorariosService,
+    private reunionesService: ReunionesService,
     private usersService: UsersService
   ) {}
 
@@ -44,17 +44,20 @@ export class HomeStudent implements OnInit {
 
     if (this.currentUser) {
       this.loadSchedule();
-      this.loadMyMeetings();
+      this.loadMyReuniones();
     }
   }
 
   loadTeachers() {
-    this.teachers = this.usersService.getUsers().filter(u => u.role === 'teacher');
+    // Cargar profesores (tipo_id = 3)
+    this.usersService.getUsersByTipo(3).subscribe(teachers => {
+      this.teachers = teachers;
+    });
   }
 
-  loadMyMeetings() {
-    this.meetingsService.getMeetings().subscribe(all => {
-      this.myMeetings = all.filter(m => m.alumno_id === this.currentUser.id);
+  loadMyReuniones() {
+    this.reunionesService.getReunionesAlumno(this.currentUser.id).subscribe(reuniones => {
+      this.myReuniones = reuniones;
     });
   }
 
@@ -63,28 +66,31 @@ export class HomeStudent implements OnInit {
   }
 
   submitRequest() {
-    if (!this.newMeeting.profesor_id || !this.newMeeting.titulo) {
+    if (!this.newReunion.profesor_id || !this.newReunion.titulo) {
       alert('Mesedez, bete eremu guztiak (Rellena todo)');
       return;
     }
 
-    const meeting: Meeting = {
-      id_reunion: 0, 
+    const reunion: Partial<Reunion> = {
       estado: 'pendiente',
       fecha: new Date(), 
-      titulo: this.newMeeting.titulo,
-      asunto: this.newMeeting.asunto,
-      profesor_id: Number(this.newMeeting.profesor_id),
-      alumno_id: this.currentUser.id
+      titulo: this.newReunion.titulo,
+      asunto: this.newReunion.asunto,
+      profesor_id: Number(this.newReunion.profesor_id),
+      alumno_id: this.currentUser.id,
+      id_centro: '15112' // Centro por defecto
     };
 
-    this.meetingsService.addMeeting(meeting);
-    
-    alert('Eskaera bidalita! (Solicitud enviada)');
-    this.showRequestForm = false;
-    this.loadMyMeetings(); 
-    
-    this.newMeeting = { titulo: '', asunto: '', profesor_id: 0 };
+    this.reunionesService.createReunion(reunion).subscribe(result => {
+      if (result) {
+        alert('Eskaera bidalita! (Solicitud enviada)');
+        this.showRequestForm = false;
+        this.loadMyReuniones(); 
+        this.newReunion = { titulo: '', asunto: '', profesor_id: 0 };
+      } else {
+        alert('Errorea eskaria bidaltzean (Error al enviar)');
+      }
+    });
   }
 
   initializeEmptyTable() {
@@ -97,19 +103,44 @@ export class HomeStudent implements OnInit {
   }
 
   loadSchedule() {
-    this.scheduleService.getScheduleByStudent(this.currentUser.id).subscribe(classes => {
-      classes.forEach(cls => {
-        const dayIndex = this.days.indexOf(cls.dia);
-        const hourIndex = cls.hora - 1;
+    // Los alumnos ven el horario general (TODO: filtrar por matriculación)
+    this.horariosService.getHorarios().subscribe(horarios => {
+      // Por ahora mostramos todos los horarios del aula B101 como ejemplo
+      const studentHorarios = horarios.filter(h => h.aula === 'Aula B101');
+      
+      studentHorarios.forEach(horario => {
+        const dayIndex = this.days.indexOf(horario.dia);
+        const hourIndex = horario.hora - 1;
         
-        if (dayIndex >= 0 && hourIndex >= 0) {
+        if (dayIndex >= 0 && hourIndex >= 0 && hourIndex < 6) {
+          const moduloNombre = horario.modulo?.nombre_eus || horario.modulo?.nombre || 'Modulua';
           this.timeTable[hourIndex][dayIndex] = {
-            text: cls.modulo_nombre,
-            subtext: cls.aula,
+            text: moduloNombre,
+            subtext: horario.aula || '',
             colorClass: 'bg-info text-white' 
           };
         }
       });
     });
+  }
+
+  getEstadoClass(estado: string): string {
+    switch (estado) {
+      case 'pendiente': return 'badge bg-warning text-dark';
+      case 'aceptada': return 'badge bg-success';
+      case 'denegada': return 'badge bg-danger';
+      case 'conflicto': return 'badge bg-secondary';
+      default: return 'badge bg-secondary';
+    }
+  }
+
+  getEstadoEus(estado: string): string {
+    switch (estado) {
+      case 'pendiente': return 'Onartzeke';
+      case 'aceptada': return 'Onartuta';
+      case 'denegada': return 'Ezeztatuta';
+      case 'conflicto': return 'Gatazka';
+      default: return estado;
+    }
   }
 }

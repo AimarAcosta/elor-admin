@@ -3,9 +3,10 @@
 .footer {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  padding: 20px 30px;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  padding: 25px 30px;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 20px 20px 0 0;
   margin-top: auto;
 }
 
@@ -16,15 +17,27 @@
 }
 
 .footer p {
-  color: #718096;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 20px 20px;
+    border-radius: 15px 15px 0 0;
+  }
 }
 
 @media (max-width: 480px) {
   .footer {
     padding: 15px;
+    border-radius: 12px 12px 0 0;
   }
   
   .footer p {

@@ -79,11 +79,22 @@
 
           <div class="col-md-6">
             <label>Rola</label>
-            <select [(ngModel)]="userForm.role" name="role" required>
-              <option value="student">Ikaslea</option>
-              <option value="teacher">Irakaslea</option>
-              <option value="admin">Administratzailea</option>
+            <select [(ngModel)]="userForm.tipo_id" name="tipo_id" required>
+              <option [value]="4">Ikaslea</option>
+              <option [value]="3">Irakaslea</option>
+              <option [value]="2">Administratzailea</option>
+              <option [value]="1">God</option>
             </select>
+          </div>
+
+          <div class="col-md-6">
+            <label>DNI</label>
+            <input type="text" [(ngModel)]="userForm.dni" name="dni" />
+          </div>
+
+          <div class="col-md-6">
+            <label>Telefonoa</label>
+            <input type="text" [(ngModel)]="userForm.telefono1" name="telefono1" />
           </div>
         </div>
 
@@ -131,7 +142,7 @@
                 <tr *ngFor="let user of filteredUsers">
                   <td>
                     <div class="user-info">
-                      <div class="avatar-circle">{{ user.nombre.charAt(0) }}</div>
+                      <div class="avatar-circle">{{ user.nombre?.charAt(0) || '?' }}</div>
                       <div>
                         <div>{{ user.username }}</div>
                         <div>{{ user.email }}</div>
@@ -142,7 +153,7 @@
                   <td>{{ user.nombre }} {{ user.apellidos }}</td>
 
                   <td>
-                    <span>{{ user.role | uppercase }}</span>
+                    <span>{{ getRoleName(user.tipo_id) | uppercase }}</span>
                   </td>
 
                   <td>
@@ -151,7 +162,7 @@
                     </button>
                     <button
                       (click)="onDeleteUser(user.id)"
-                      [disabled]="user.role === 'god' || user.role === 'admin'"
+                      [disabled]="user.tipo_id === 1"
                       title="Ezabatu"
                     >
                       <i class="bi bi-trash"></i>

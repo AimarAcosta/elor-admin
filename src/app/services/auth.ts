@@ -29,7 +29,18 @@ export class AuthService {
 
   hasRole(expectedRole: string): boolean {
     const user = this.getUser();
-    if (user && user.role === 'god') return true; 
-    return user && user.role === expectedRole;
+    if (!user) return false;
+    
+    // tipo_id: 1=god, 2=admin, 3=profesor, 4=alumno
+    if (user.tipo_id === 1) return true; // god has access to everything
+    
+    const roleMap: { [key: string]: number } = {
+      'god': 1,
+      'admin': 2,
+      'teacher': 3,
+      'student': 4
+    };
+    
+    return user.tipo_id === roleMap[expectedRole];
   }
 }

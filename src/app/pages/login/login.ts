@@ -29,17 +29,17 @@ export class Login {
         console.log('Login correcto:', user.username);
         this.authService.login(user);
 
-        switch (user.role) {
-          case 'god':
+        switch (user.tipo_id) {
+          case 1: // god
             this.router.navigate(['/god']);
             break;
-          case 'admin':
+          case 2: // admin
             this.router.navigate(['/admin']);
             break;
-          case 'teacher':
+          case 3: // teacher/profesor
             this.router.navigate(['/teacher']);
             break;
-          case 'student':
+          case 4: // student/alumno
             this.router.navigate(['/student']);
             break;
         }

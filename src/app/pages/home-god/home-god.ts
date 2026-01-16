@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-import { UsersService, User } from '../../services/users';
-import { MeetingsService } from '../../services/meetings';
+import { UsersService, User, Tipo } from '../../services/users';
+import { ReunionesService } from '../../services/meetings';
 
 @Component({
   selector: 'app-home-god',
@@ -19,28 +19,40 @@ export class HomeGod implements OnInit {
 
   users: User[] = [];
   filteredUsers: User[] = [];
+  tipos: Tipo[] = [];
   searchTerm: string = '';
 
   showForm: boolean = false; 
   isEditing: boolean = false; 
-  userForm: User = this.getEmptyUser(); 
+  userForm: Partial<User> = this.getEmptyUser(); 
 
   constructor(
     private usersService: UsersService,
-    private meetingsService: MeetingsService
+    private reunionesService: ReunionesService
   ) {}
 
   ngOnInit() {
     this.loadData();
+    this.loadTipos();
   }
 
   loadData() {
-    this.users = this.usersService.getUsers();
-    this.filterUsers(); 
+    this.usersService.getUsers().subscribe(users => {
+      this.users = users;
+      this.filterUsers(); 
+      this.studentCount = this.users.filter(u => u.tipo_id === 4).length;
+      this.teacherCount = this.users.filter(u => u.tipo_id === 3).length;
+    });
     
-    this.studentCount = this.users.filter(u => u.role === 'student').length;
-    this.teacherCount = this.users.filter(u => u.role === 'teacher').length;
-    this.todayMeetings = this.meetingsService.getTodayMeetingsCount();
+    this.reunionesService.getTodayCount().subscribe(count => {
+      this.todayMeetings = count;
+    });
+  }
+
+  loadTipos() {
+    this.usersService.getTipos().subscribe(tipos => {
+      this.tipos = tipos;
+    });
   }
 
   openCreateForm() {
@@ -56,48 +68,61 @@ export class HomeGod implements OnInit {
   }
 
   onSubmit() {
-    if (this.isEditing) {
-      this.usersService.updateUser(this.userForm);
+    if (this.isEditing && this.userForm.id) {
+      this.usersService.updateUser(this.userForm.id, this.userForm).subscribe(() => {
+        this.showForm = false;
+        this.loadData();
+      });
     } else {
-      this.usersService.createUser(this.userForm);
+      this.usersService.createUser(this.userForm).subscribe(() => {
+        this.showForm = false;
+        this.loadData();
+      });
     }
-    
-    this.showForm = false;
-    this.loadData();
   }
 
   cancelForm() {
     this.showForm = false;
   }
 
-  getEmptyUser(): User {
+  getEmptyUser(): Partial<User> {
     return {
-      id: 0,
       username: '',
-      password: '123', 
+      password: '123456', 
       nombre: '',
       apellidos: '',
       email: '',
-      role: 'student' 
+      tipo_id: 4 // Por defecto alumno
     };
   }
 
   onDeleteUser(id: number) {
+    const user = this.users.find(u => u.id === id);
+    if (user && user.tipo_id === 1) {
+      alert('ERROREA: Ezin duzu God erabiltzailea ezabatu.');
+      return;
+    }
+    
     if (confirm('¿Erabiltzaile hau ezabatu nahi duzu?')) {
-      const success = this.usersService.deleteUser(id);
-      if (success) {
-        this.loadData();
-      } else {
-        alert('ERROREA: Ezin duzu administratzaile bat ezabatu.');
-      }
+      this.usersService.deleteUser(id).subscribe(success => {
+        if (success) {
+          this.loadData();
+        } else {
+          alert('ERROREA: Ezin izan da erabiltzailea ezabatu.');
+        }
+      });
     }
   }
 
   filterUsers() {
     this.filteredUsers = this.users.filter(user => 
-      user.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      user.apellidos.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      user.username.toLowerCase().includes(this.searchTerm.toLowerCase())
+      (user.nombre?.toLowerCase() || '').includes(this.searchTerm.toLowerCase()) ||
+      (user.apellidos?.toLowerCase() || '').includes(this.searchTerm.toLowerCase()) ||
+      (user.username?.toLowerCase() || '').includes(this.searchTerm.toLowerCase())
     );
+  }
+
+  getRoleName(tipoId: number): string {
+    return this.usersService.getRoleName(tipoId);
   }
 }
