@@ -1,0 +1,43 @@
+﻿@page "/"
+@inject NavigationManager Nav
+
+<div class="container mt-5">
+    <div class="card shadow p-4 mx-auto" style="max-width: 400px;">
+        <div class="mb-3">
+            <h2 class="text-center">Login</h2>
+            <label>Erabiltzaile:</label>
+            <input type="text" class="form-control" @bind="erabiltzaile" />
+        </div>
+        <div class="mb-3">
+            <label>Pasahitza:</label>
+            <input type="password" class="form-control" @bind="pasahitza" />
+        </div>
+        @if (!string.IsNullOrEmpty(erroreMezua))
+        {
+            <div class="alert alert-danger">@erroreMezua</div>
+        }
+        <button class="btn btn-primary w-100" @onclick="ManejoDeLogin">Entrar</button>
+    </div>
+</div> 
+
+
+@code {
+    private string erabiltzaile;
+    private string pasahitza;
+    private string erroreMezua;
+
+    private async Task ManejoDeLogin()
+    {
+        // Luego tengo que conctar el servicio Rest
+
+        if (erabiltzaile == "admin" && pasahitza == "1234")
+        {
+            Nav.NavigateTo("/buscador");
+        }
+        else
+        {
+            erroreMezua = "Erabiltzaile edo pasahitza okerra";
+        }
+    }
+}
+

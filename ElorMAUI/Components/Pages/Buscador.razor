@@ -1,0 +1,139 @@
+﻿@page "/buscador"
+@using ElorMAUI.Models
+@using ElorMAUI.Services
+@inject CentroService CentroService
+@inject NavigationManager Nav
+
+<h3>Buscador de Centros</h3>
+
+@if (centroGuztiak == null)
+{
+    <p>Cargando datos...</p>
+}
+else
+{
+    <div class="filters">
+        <select @onchange="OnTipoChanged" class="form-select mb-2">
+            <option value="">-- Selecciona Tipo --</option>
+            @foreach (var t in tipos)
+            {
+                <option value="@t">@t</option>
+            }
+        </select>
+
+        <select @onchange="OnTerritorioChanged" class="form-select mb-2" disabled="@(string.IsNullOrEmpty(tipoAukeratuta))">
+            <option value="">-- Selecciona Territorio --</option>
+            @foreach (var terr in territorios)
+            {
+                <option value="@terr">@terr</option>
+            }
+        </select>
+
+        <select @onchange="OnMunicipioChanged" class="form-select mb-2" disabled="@(string.IsNullOrEmpty(territorioAukeratuta))">
+            <option value="">-- Selecciona Municipio --</option>
+            @foreach (var mun in municipios)
+            {
+                <option value="@mun">@mun</option>
+            }
+        </select>
+    </div>
+
+    <hr />
+    <p>Resultados encontrados: @centrosFiltrados.Count</p>
+
+    // Tabla para los resultados
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Municipio</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var centro in centrosFiltrados)
+            {
+                <tr>
+                    <td>@centro.NOM</td>
+                    <td>@centro.DMUNIC</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" @onclick="@(() => Nav.NavigateTo($"/detalle/{centro.CCEN}"))">
+                            Ver
+                        </button>
+                     </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    private List<Centro> centroGuztiak;
+    private List<Centro> centrosFiltrados = new();
+
+
+    private List<string> tipos = new();
+    private List<string> territorios = new();
+    private List<string> municipios = new();
+
+
+    private string tipoAukeratuta;
+    private string territorioAukeratuta;
+    private string municipioAukeratuta;
+
+    protected override async Task OnInitializedAsync()
+    {
+        centroGuztiak = await CentroService.GetCentros();
+        centrosFiltrados = centroGuztiak;
+        // LINQ para el primer selector
+        tipos = centroGuztiak.Select(x => x.DTITUC).Distinct().OrderBy(x => x).ToList();
+    }
+
+    private void OnTipoChanged(ChangeEventArgs e)
+    {
+        tipoAukeratuta = e.Value?.ToString();
+        territorioAukeratuta = null; // Reset de hijos
+        municipioAukeratuta = null;
+
+        territorios = centroGuztiak
+            .Where(x => x.DTITUC == tipoAukeratuta)
+            .Select(x => x.DTERRE)
+            .Distinct().OrderBy(x => x).ToList();
+
+        Filtrar();
+    }
+    
+    private void OnTerritorioChanged(ChangeEventArgs e)
+    {
+        territorioAukeratuta = e.Value?.ToString();
+        municipioAukeratuta = null;
+
+        municipios = centroGuztiak
+            .Where(x => x.DTITUC == tipoAukeratuta && x.DTERRE == territorioAukeratuta)
+            .Select(x => x.DMUNIC)
+            .Distinct().OrderBy(x => x).ToList();
+
+        Filtrar();
+    }
+    // Municipio seleccionado
+    private void OnMunicipioChanged(ChangeEventArgs e)
+    {
+        municipioAukeratuta = e.Value?.ToString();
+        Filtrar();
+    }
+    
+    private void Filtrar()
+    {
+        var query = centroGuztiak.AsQueryable();
+
+        if (!string.IsNullOrEmpty(tipoAukeratuta))
+            query = query.Where(x => x.DTITUC == tipoAukeratuta);
+
+        if (!string.IsNullOrEmpty(territorioAukeratuta))
+            query = query.Where(x => x.DTERRE == territorioAukeratuta);
+
+        if (!string.IsNullOrEmpty(municipioAukeratuta))
+            query = query.Where(x => x.DMUNIC == municipioAukeratuta);
+
+        centrosFiltrados = query.ToList();
+   }
+ }

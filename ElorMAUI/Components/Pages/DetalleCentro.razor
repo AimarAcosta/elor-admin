@@ -1,0 +1,48 @@
+﻿@page "/detalle/{IdCentro:int}"
+@using ElorMAUI.Models
+@using ElorMAUI.Services
+@inject CentroService CentroService
+@inject NavigationManager Nav
+
+<div class="container m-3">
+    @if (centro == null) {
+         <p>Cargando centro...</p>
+    } else {
+        <h3>@centro.NOM</h3>
+         <hr />
+         <div class="row">
+            <div class="col-md-6">
+                <p><strong>Lurraldea:</strong>@centro.DTERRE</p>
+                <p><strong>Udalerria:</strong>@centro.DMUNIC</p>
+                <p><strong>Helbidea:</strong>@centro.DOMI</p>
+                <p><strong>Email:</strong>@centro.EMAIL</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="alert alert-info">
+                    <h5>Eguraldia</h5>
+                    <p>Tenperatura: -- ºC</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3" style="height:300px; background-color:#e9ecef; border-radius:10px; display:flex; align-items:center; justify-content:center;">
+            <p>Mapa kokapena: @centro.LATITUD , @centro.LONGITUD</p>
+        </div>
+
+        <button class="btn btn-secondary mt-3" @onclick='(() => Nav.NavigateTo("/buscador"))'>Atzera</button>
+
+    }
+</div>
+
+
+@code {
+    [Parameter] public int IdCentro { get; set; }
+    private Centro centro;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var todos = await CentroService.GetCentros();
+        centro = todos.FirstOrDefault(c => c.CCEN == IdCentro);
+    }
+
+}
