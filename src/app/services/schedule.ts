@@ -84,6 +84,16 @@ export class HorariosService {
     );
   }
 
+  // Obtener horarios de un ciclo
+  getHorarioCiclo(cicloId: number): Observable<Horario[]> {
+    return this.http.get<Horario[]>(`${this.apiUrl}/ciclo/${cicloId}`).pipe(
+      catchError((error) => {
+        console.error('Error al obtener horarios del ciclo:', error);
+        return of([]);
+      })
+    );
+  }
+
   // Crear horario
   createHorario(horario: Partial<Horario>): Observable<Horario | undefined> {
     return this.http.post<Horario>(this.apiUrl, horario).pipe(

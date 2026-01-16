@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { UsersService, User, Tipo } from '../../services/users';
@@ -28,7 +28,8 @@ export class HomeAdmin implements OnInit {
 
   constructor(
     private usersService: UsersService,
-    private reunionesService: ReunionesService
+    private reunionesService: ReunionesService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -42,10 +43,12 @@ export class HomeAdmin implements OnInit {
       this.filterUsers();
       this.studentCount = this.users.filter(u => u.tipo_id === 4).length;
       this.teacherCount = this.users.filter(u => u.tipo_id === 3).length;
+      this.cdr.detectChanges();
     });
     
     this.reunionesService.getTodayCount().subscribe(count => {
       this.todayMeetings = count;
+      this.cdr.detectChanges();
     });
   }
 
@@ -53,6 +56,7 @@ export class HomeAdmin implements OnInit {
     this.usersService.getTipos().subscribe(tipos => {
       // Admin no puede crear god (tipo_id = 1)
       this.tipos = tipos.filter(t => t.id !== 1);
+      this.cdr.detectChanges();
     });
   }
 

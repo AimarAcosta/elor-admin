@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { HorariosService, Horario, WeekDay } from '../../services/schedule';
 import { ReunionesService, Reunion } from '../../services/meetings';
@@ -7,7 +8,7 @@ import { ReunionesService, Reunion } from '../../services/meetings';
 @Component({
   selector: 'app-home-teacher',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './home-teacher.html',
   styleUrls: ['./home-teacher.css'],
 })
@@ -21,20 +22,41 @@ export class HomeTeacher implements OnInit {
   hours = [1, 2, 3, 4, 5, 6];
   currentUser: any;
   myReuniones: Reunion[] = [];
+  pendingReuniones: Reunion[] = [];
+
+  // Estadísticas
+  totalReuniones: number = 0;
+  pendingCount: number = 0;
+  acceptedCount: number = 0;
+  classCount: number = 0;
 
   constructor(
     private authService: AuthService,
     private horariosService: HorariosService,
-    private reunionesService: ReunionesService
+    private reunionesService: ReunionesService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
+    console.log('HomeTeacher - currentUser:', this.currentUser);
     this.initializeEmptyTable();
-    if (this.currentUser) {
+    
+    // Cargar datos aunque no haya usuario (para debug)
+    if (this.currentUser && this.currentUser.id) {
       this.loadScheduleData(this.currentUser.id);
       this.loadReuniones(this.currentUser.id);
+    } else {
+      console.log('No currentUser.id, loading all horarios');
+      this.loadAllHorarios();
     }
+  }
+
+  loadAllHorarios() {
+    this.horariosService.getHorarios().subscribe((horarios) => {
+      console.log('All horarios loaded:', horarios);
+      this.classCount = horarios.length;
+    });
   }
 
   initializeEmptyTable() {
@@ -52,7 +74,10 @@ export class HomeTeacher implements OnInit {
   }
 
   loadScheduleData(userId: number) {
+    console.log('loadScheduleData - userId:', userId);
     this.horariosService.getHorarioProfesor(userId).subscribe((horarios) => {
+      console.log('Horarios loaded:', horarios);
+      this.classCount = horarios.length;
       horarios.forEach((horario) => {
         const dayIndex = this.days.indexOf(horario.dia);
         const hourIndex = horario.hora - 1;
@@ -67,12 +92,20 @@ export class HomeTeacher implements OnInit {
           };
         }
       });
+      this.cdr.detectChanges();
     });
   }
 
   loadReuniones(profesorId: number) {
+    console.log('loadReuniones - profesorId:', profesorId);
     this.reunionesService.getReunionesProfesor(profesorId).subscribe((reuniones) => {
+      console.log('Reuniones loaded:', reuniones);
       this.myReuniones = reuniones;
+      this.totalReuniones = reuniones.length;
+      this.pendingReuniones = reuniones.filter(r => r.estado === 'pendiente');
+      this.pendingCount = this.pendingReuniones.length;
+      this.acceptedCount = reuniones.filter(r => r.estado === 'aceptada').length;
+      this.cdr.detectChanges();
       
       // Mostrar reuniones en el horario según la fecha
       reuniones.forEach((reunion) => {
@@ -115,5 +148,29 @@ export class HomeTeacher implements OnInit {
         }
       });
     });
+  }
+
+  acceptReunion(reunion: Reunion) {
+    this.reunionesService.updateReunion(reunion.id_reunion, { estado: 'aceptada' }).subscribe(() => {
+      this.loadReuniones(this.currentUser.id);
+      alert('Bilera onartuta! (Reunión aceptada)');
+    });
+  }
+
+  rejectReunion(reunion: Reunion) {
+    this.reunionesService.updateReunion(reunion.id_reunion, { estado: 'denegada' }).subscribe(() => {
+      this.loadReuniones(this.currentUser.id);
+      alert('Bilera ezeztatuta (Reunión rechazada)');
+    });
+  }
+
+  getEstadoEus(estado: string): string {
+    switch (estado) {
+      case 'pendiente': return 'Onartzeke';
+      case 'aceptada': return 'Onartuta';
+      case 'denegada': return 'Ezeztatuta';
+      case 'conflicto': return 'Gatazka';
+      default: return estado;
+    }
   }
 }

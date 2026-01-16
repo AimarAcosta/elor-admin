@@ -1,2 +1,242 @@
-/* ===== HOME TEACHER - Estilos especÌficos ===== */
-/* Los estilos base est·n en styles.css */
+/* ===== HOME TEACHER - Estilos espec√≠ficos ===== */
+/* Los estilos base est√°n en styles.css */
+
+.stat-card {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.stat-card .icon-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+}
+
+.stat-card .icon-circle i {
+  font-size: 24px;
+  color: white;
+}
+
+.stat-card h5 {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.stat-card h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
+
+.empty-state i {
+  font-size: 48px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.meetings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.meetings-table th,
+.meetings-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.meetings-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-accept,
+.btn-reject {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s;
+}
+
+.btn-accept {
+  background: #28a745;
+  color: white;
+}
+
+.btn-accept:hover {
+  background: #218838;
+}
+
+.btn-reject {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-reject:hover {
+  background: #c82333;
+}
+
+.meetings-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.meeting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.meeting-item:last-child {
+  border-bottom: none;
+}
+
+.meeting-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.meeting-title {
+  font-weight: 500;
+  color: #333;
+}
+
+.meeting-subtitle {
+  color: #666;
+  font-size: 13px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-pending {
+  background: #ffc107;
+  color: #333;
+}
+
+.status-approved {
+  background: #28a745;
+  color: white;
+}
+
+.status-rejected {
+  background: #dc3545;
+  color: white;
+}
+
+/* Schedule Table */
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.schedule-table th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.schedule-table th:first-child {
+  width: 40px;
+}
+
+.hour-cell {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.schedule-cell {
+  height: 70px;
+  padding: 4px !important;
+}
+
+.schedule-content {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  padding: 8px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+}
+
+.schedule-content.bg-light {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.schedule-text {
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.schedule-subtext {
+  font-size: 10px;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+.schedule-icon {
+  margin-bottom: 4px;
+}
+
+.schedule-icon i {
+  font-size: 14px;
+}
+
+.schedule-empty {
+  color: #ccc;
+  font-size: 14px;
+}

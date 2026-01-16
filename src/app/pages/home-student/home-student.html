@@ -1,20 +1,62 @@
 ﻿<div class="container">
   <div class="row">
     <div class="col-12">
+      <h2><i class="bi bi-backpack-fill"></i> Ikaslearen Panela</h2>
+      <p>Kaixo, <strong>{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</strong>! Hemen zure ordutegia eta bilerak kudeatu ditzakezu.</p>
+    </div>
+  </div>
+
+  <!-- Estadísticas -->
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="icon-circle">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <h5>Onartzeke</h5>
+          <h2>{{ pendingCount }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="icon-circle">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <h5>Onartuta</h5>
+          <h2>{{ acceptedCount }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card stat-card">
+        <div class="card-body">
+          <div class="icon-circle">
+            <i class="bi bi-person-video3"></i>
+          </div>
+          <h5>Irakasleak</h5>
+          <h2>{{ teacherCount }}</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
       <div class="card">
         <div class="card-header">
           <div>
-            <h2><i class="bi bi-backpack-fill"></i> Ikaslearen Panela</h2>
-            <p>Kaixo, <strong>{{ currentUser?.nombre }}</strong>! Hemen zure ordutegia eta bilerak kudeatu ditzakezu.</p>
+            <h5><i class="bi bi-calendar-plus"></i> Bilera / Tutoretza Eskatu</h5>
           </div>
           <button (click)="toggleForm()">
             <i class="bi" [class.bi-x-lg]="showRequestForm" [class.bi-plus-lg]="!showRequestForm"></i>
-            {{ showRequestForm ? 'Utzi' : 'Tutoretza Eskatu' }}
+            {{ showRequestForm ? 'Utzi' : 'Eskatu' }}
           </button>
         </div>
 
         <div class="card-body" *ngIf="showRequestForm">
-          <h5><i class="bi bi-calendar-plus"></i> Bilera / Tutoretza Eskatu</h5>
           <form (ngSubmit)="submitRequest()">
             <div class="form-row">
               <div class="form-group">
@@ -41,28 +83,39 @@
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="col-12" *ngIf="myReuniones.length > 0">
+  <!-- Mis reuniones -->
+  <div class="row">
+    <div class="col-12">
       <div class="card">
         <div class="card-header">
           <h5><i class="bi bi-clock-history"></i> Nire Bilerak</h5>
         </div>
         <div class="card-body">
-          <ul class="meetings-list">
+          <div *ngIf="myReuniones.length === 0" class="empty-state">
+            <i class="bi bi-calendar-x"></i>
+            <p>Ez duzu bilerarik oraindik</p>
+          </div>
+          <ul class="meetings-list" *ngIf="myReuniones.length > 0">
             <li class="meeting-item" *ngFor="let m of myReuniones">
               <div class="meeting-content">
                 <span class="meeting-title">{{ m.titulo }}</span>
-                <small class="meeting-subtitle">Profe ID: {{ m.profesor_id }} | Data: {{ m.fecha | date : 'shortDate' }}</small>
+                <small class="meeting-subtitle">
+                  {{ m.profesor?.nombre }} {{ m.profesor?.apellidos }} | {{ m.fecha | date : 'shortDate' }}
+                </small>
               </div>
               <span class="badge" [class.status-pending]="m.estado === 'pendiente'" [class.status-approved]="m.estado === 'aceptada'" [class.status-rejected]="m.estado === 'denegada'">
-                {{ m.estado | uppercase }}
+                {{ getEstadoEus(m.estado) | uppercase }}
               </span>
             </li>
           </ul>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-header">

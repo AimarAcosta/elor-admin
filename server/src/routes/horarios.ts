@@ -46,6 +46,22 @@ router.get('/aula/:aula', async (req, res) => {
   }
 });
 
+// GET /api/horarios/ciclo/:id - Obtener horarios de un ciclo
+router.get('/ciclo/:id', async (req, res) => {
+  try {
+    const horarios = await horarioRepository().find({
+      relations: ['profesor', 'modulo', 'modulo.ciclo'],
+      order: { dia: 'ASC', hora: 'ASC' },
+    });
+    // Filtrar por ciclo_id del módulo
+    const cicloId = parseInt(req.params.id);
+    const filteredHorarios = horarios.filter(h => h.modulo?.ciclo_id === cicloId);
+    res.json(filteredHorarios);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener horarios del ciclo' });
+  }
+});
+
 // GET /api/horarios/:id - Obtener horario por ID
 router.get('/:id', async (req, res) => {
   try {

@@ -67,6 +67,7 @@ export class UsersService {
 
   // Obtener usuarios por tipo (1=god, 2=admin, 3=profesor, 4=alumno)
   getUsersByTipo(tipoId: number): Observable<User[]> {
+    console.log('getUsersByTipo - calling:', `${this.apiUrl}/role/${tipoId}`);
     return this.http.get<User[]>(`${this.apiUrl}/role/${tipoId}`).pipe(
       catchError((error) => {
         console.error('Error al obtener usuarios por tipo:', error);
