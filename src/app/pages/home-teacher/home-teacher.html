@@ -2,7 +2,9 @@
   <div class="row">
     <div class="col-12">
       <h2><i class="bi bi-calendar-week"></i>Irakaslearen Ordutegia</h2>
-      <p>Ongi etorri, <strong>{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</strong></p>
+      <p>
+        Ongi etorri, <strong>{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</strong>
+      </p>
     </div>
   </div>
 
@@ -48,9 +50,7 @@
                       </span>
                     </div>
 
-                    <div *ngIf="!cell.text" class="schedule-empty">
-                      -
-                    </div>
+                    <div *ngIf="!cell.text" class="schedule-empty">-</div>
                   </td>
                 </tr>
               </tbody>
@@ -73,9 +73,7 @@
         <span class="legend-item">
           <span class="legend-badge status-rejected"></span>Ezeztatuta
         </span>
-        <span class="legend-item">
-          <span class="legend-badge status-conflict"></span>Gatazka
-        </span>
+        <span class="legend-item"> <span class="legend-badge status-conflict"></span>Gatazka </span>
       </div>
     </div>
   </div>

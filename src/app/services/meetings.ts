@@ -56,4 +56,10 @@ export class MeetingsService {
         m.fecha.getFullYear() === today.getFullYear()
     ).length;
   }
+
+  addMeeting(meeting: Meeting): void {
+    const newId = this.meetings.length > 0 ? Math.max(...this.meetings.map(m => m.id_reunion)) + 1 : 1;
+    meeting.id_reunion = newId;
+    this.meetings.push(meeting);
+  }
 }

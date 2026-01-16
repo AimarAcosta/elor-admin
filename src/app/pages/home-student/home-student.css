@@ -1,0 +1,36 @@
+/* ===== HOME STUDENT - Estilos específicos ===== */
+/* Los estilos base están en styles.css */
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.meetings-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.meeting-item {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.meeting-item:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.meeting-item:last-child {
+  border-bottom: none;
+}

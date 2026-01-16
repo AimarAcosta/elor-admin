@@ -1,1 +1,98 @@
-<p>home-student works!</p>
+﻿<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2><i class="bi bi-backpack-fill"></i> Ikaslearen Panela</h2>
+            <p>Kaixo, <strong>{{ currentUser?.nombre }}</strong>! Hemen zure ordutegia eta bilerak kudeatu ditzakezu.</p>
+          </div>
+          <button (click)="toggleForm()">
+            <i class="bi" [class.bi-x-lg]="showRequestForm" [class.bi-plus-lg]="!showRequestForm"></i>
+            {{ showRequestForm ? 'Utzi' : 'Tutoretza Eskatu' }}
+          </button>
+        </div>
+
+        <div class="card-body" *ngIf="showRequestForm">
+          <h5><i class="bi bi-calendar-plus"></i> Bilera / Tutoretza Eskatu</h5>
+          <form (ngSubmit)="submitRequest()">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Norekin?</label>
+                <select [(ngModel)]="newMeeting.profesor_id" name="profesor" required>
+                  <option *ngFor="let t of teachers" [value]="t.id">
+                    {{ t.nombre }} {{ t.apellidos }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Izenburua</label>
+                <input type="text" [(ngModel)]="newMeeting.titulo" name="titulo" required placeholder="Adib: Duda examen..." />
+              </div>
+              <div class="form-group">
+                <label>Gaia</label>
+                <textarea [(ngModel)]="newMeeting.asunto" name="asunto" rows="2"></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit"><i class="bi bi-send"></i> Bidali Eskaera</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12" *ngIf="myMeetings.length > 0">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-clock-history"></i> Nire Bilerak</h5>
+        </div>
+        <div class="card-body">
+          <ul class="meetings-list">
+            <li class="meeting-item" *ngFor="let m of myMeetings">
+              <div class="meeting-content">
+                <span class="meeting-title">{{ m.titulo }}</span>
+                <small class="meeting-subtitle">Profe ID: {{ m.profesor_id }} | Data: {{ m.fecha | date : 'shortDate' }}</small>
+              </div>
+              <span class="badge" [class.status-pending]="m.estado === 'pendiente'" [class.status-approved]="m.estado === 'aceptada'" [class.status-rejected]="m.estado === 'denegada'">
+                {{ m.estado | uppercase }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="bi bi-calendar-week"></i> Nire Ordutegia</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="schedule-table">
+              <thead>
+                <tr>
+                  <th>O</th>
+                  <th *ngFor="let day of daysEus">{{ day }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of timeTable; let i = index">
+                  <td class="hour-cell">{{ i + 1 }}</td>
+                  <td *ngFor="let cell of row" class="schedule-cell">
+                    <div *ngIf="cell.text" class="schedule-content" [ngClass]="cell.colorClass">
+                      <span class="schedule-text">{{ cell.text }}</span>
+                      <span class="schedule-subtext" *ngIf="cell.subtext">{{ cell.subtext }}</span>
+                    </div>
+                    <div *ngIf="!cell.text" class="schedule-empty">-</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

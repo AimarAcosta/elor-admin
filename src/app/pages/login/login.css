@@ -1,31 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: gradient 15s ease infinite;
-}
-
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+/* ===== LOGIN PAGE ===== */
 
 .login-page {
   display: flex;
@@ -60,26 +33,6 @@ body {
   animation: shine 3s infinite;
 }
 
-@keyframes shine {
-  0% {
-    left: -100%;
-  }
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .login-header {
   text-align: center;
   margin-bottom: 40px;
@@ -96,16 +49,6 @@ body {
   padding: 15px;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 .login-header h3 {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -117,12 +60,6 @@ body {
   margin: 0;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 .form-group {
   position: relative;
 }
@@ -130,11 +67,6 @@ form {
 .form-group label {
   display: block;
   margin-bottom: 10px;
-  font-weight: 700;
-  color: #2d3748;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .input-with-icon {
@@ -155,31 +87,11 @@ form {
 .input-with-icon input {
   width: 100%;
   padding: 16px 18px 16px 50px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 15px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-  font-weight: 500;
-  font-family: 'Poppins', sans-serif;
-}
-
-.input-with-icon input:focus {
-  outline: none;
-  border-color: #667eea;
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15), 0 8px 20px rgba(102, 126, 234, 0.2);
-  transform: translateY(-2px);
 }
 
 .input-with-icon input:focus + .icon,
 .input-with-icon input:not(:placeholder-shown) + .icon {
   color: #667eea;
-}
-
-.input-with-icon input::placeholder {
-  color: #cbd5e0;
-  font-weight: 500;
 }
 
 .error-box {
@@ -197,16 +109,9 @@ form {
 }
 
 @keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 .error-box i {
@@ -229,6 +134,8 @@ form {
   position: relative;
   overflow: hidden;
   font-family: 'Poppins', sans-serif;
+  width: 100%;
+  display: block;
 }
 
 .btn-submit::before {

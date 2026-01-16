@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 export interface ScheduleEntry {
   id: number;
   dia: 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES';
-  hora: number; // 1 a 6
+  hora: number;
   profe_id: number;
   modulo_nombre: string;
   aula: string;
@@ -15,7 +15,6 @@ export interface ScheduleEntry {
 })
 export class ScheduleService {
   private schedule: ScheduleEntry[] = [
-    // LUNES
     {
       id: 34,
       dia: 'LUNES',
@@ -61,7 +60,7 @@ export class ScheduleService {
       hora: 4,
       profe_id: 3,
       modulo_nombre: 'Tutoretza',
-      aula: 'Sala Profes',
+      aula: 'Irakasle Gela',
     },
     {
       id: 635,
@@ -79,11 +78,51 @@ export class ScheduleService {
       modulo_nombre: 'Zaintza',
       aula: 'Pasillo',
     },
+
+    {
+      id: 100,
+      dia: 'LUNES',
+      hora: 1,
+      profe_id: 99,
+      modulo_nombre: 'Sist. Informaticos',
+      aula: '106',
+    },
+    {
+      id: 101,
+      dia: 'LUNES',
+      hora: 2,
+      profe_id: 99,
+      modulo_nombre: 'Sist. Informaticos',
+      aula: '106',
+    },
+    { id: 102, dia: 'LUNES', hora: 3, profe_id: 3, modulo_nombre: 'Datu-atzipena', aula: '106' },
+    { id: 103, dia: 'LUNES', hora: 4, profe_id: 3, modulo_nombre: 'Datu-atzipena', aula: '106' },
+    {
+      id: 104,
+      dia: 'MARTES',
+      hora: 1,
+      profe_id: 99,
+      modulo_nombre: 'Ingeles Teknikoa',
+      aula: '201',
+    },
+    {
+      id: 105,
+      dia: 'MARTES',
+      hora: 2,
+      profe_id: 99,
+      modulo_nombre: 'Ingeles Teknikoa',
+      aula: '201',
+    },
+    { id: 106, dia: 'VIERNES', hora: 6, profe_id: 99, modulo_nombre: 'Tutoretza', aula: '106' },
   ];
 
   constructor() {}
 
   getScheduleByTeacher(teacherId: number): Observable<ScheduleEntry[]> {
     return of(this.schedule.filter((s) => s.profe_id === teacherId));
+  }
+
+  getScheduleByStudent(studentId: number): Observable<ScheduleEntry[]> {
+    return of(this.schedule.filter((s) => s.id >= 100));
   }
 }
