@@ -195,3 +195,57 @@
   background: #dc3545;
   color: white;
 }
+
+/* Centro selection */
+.centro-selection {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.centro-selection label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.selected-centro-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.selected-centro-preview strong {
+  color: #1a1a1a;
+}
+
+.selected-centro-preview small {
+  color: #666;
+}
+
+.btn-change-centro {
+  padding: 0.5rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.btn-change-centro:hover {
+  background: #5a6fd6;
+}
+
+.centro-selector-container {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}

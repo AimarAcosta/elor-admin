@@ -50,7 +50,6 @@ export class Reunion {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  // Relaciones
   @ManyToOne(() => User, (user) => user.reunionesAsProfesor)
   @JoinColumn({ name: 'profesor_id' })
   profesor: User;

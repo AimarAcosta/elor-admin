@@ -5,7 +5,6 @@ import { Modulo } from '../entities/Modulo';
 const router = Router();
 const moduloRepository = () => AppDataSource.getRepository(Modulo);
 
-// GET /api/modulos - Obtener todos los módulos
 router.get('/', async (req, res) => {
   try {
     const modulos = await moduloRepository().find({
@@ -18,7 +17,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/modulos/ciclo/:id - Obtener módulos por ciclo
 router.get('/ciclo/:id', async (req, res) => {
   try {
     const modulos = await moduloRepository().find({
@@ -32,7 +30,6 @@ router.get('/ciclo/:id', async (req, res) => {
   }
 });
 
-// GET /api/modulos/:id - Obtener módulo por ID
 router.get('/:id', async (req, res) => {
   try {
     const modulo = await moduloRepository().findOne({

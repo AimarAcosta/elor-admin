@@ -31,8 +31,7 @@ export class AuthService {
     const user = this.getUser();
     if (!user) return false;
     
-    // tipo_id: 1=god, 2=admin, 3=profesor, 4=alumno
-    if (user.tipo_id === 1) return true; // god has access to everything
+    if (user.tipo_id === 1) return true;
     
     const roleMap: { [key: string]: number } = {
       'god': 1,

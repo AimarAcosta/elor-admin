@@ -48,7 +48,6 @@ export class User {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  // Relaciones
   @ManyToOne(() => Tipo, (tipo) => tipo.users)
   @JoinColumn({ name: 'tipo_id' })
   tipo: Tipo;

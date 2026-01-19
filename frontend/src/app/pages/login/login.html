@@ -1,13 +1,13 @@
 <div class="login-page">
   <div class="login-card">
     <div class="login-header">
-      <img src="logo.jpg" alt="Elorrieta Logo" class="login-logo" />
+      <img src="assets/logo.jpg" alt="Elorrieta Logo" class="login-logo" />
       <h3>ElorAdmin</h3>
     </div>
 
     <form (ngSubmit)="onLogin()">
       <div class="form-group">
-        <label for="username">Erabiltzailea</label>
+        <label for="username">{{ 'LOGIN.USERNAME' | translate }}</label>
         <div class="input-with-icon">
           <span class="icon"><i class="bi bi-person-fill"></i></span>
           <input
@@ -22,7 +22,7 @@
       </div>
 
       <div class="form-group">
-        <label for="password">Pasahitza</label>
+        <label for="password">{{ 'LOGIN.PASSWORD' | translate }}</label>
         <div class="input-with-icon">
           <span class="icon"><i class="bi bi-lock-fill"></i></span>
           <input
@@ -41,7 +41,7 @@
         <span>{{ errorMessage }}</span>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-submit">Sartu</button>
+      <button type="submit" class="btn btn-primary btn-submit">{{ 'LOGIN.SUBMIT' | translate }}</button>
     </form>
   </div>
 </div>

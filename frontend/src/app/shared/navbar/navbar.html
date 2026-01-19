@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand d-flex align-items-center" routerLink="/">
       <img
-        src="logo.jpg"
+        src="assets/logo.jpg"
         alt="Logo"
         width="30"
         height="30"
@@ -11,18 +11,30 @@
       <span class="fw-bold tracking-wide">Elorrieta</span>
     </a>
 
-    <div class="d-flex align-items-center" *ngIf="currentUser">
-      <div class="text-white me-3 text-end d-none d-md-block">
-        <div class="fw-bold" style="font-size: 0.9rem">
-          {{ currentUser.nombre }} {{ currentUser.apellidos }}
-        </div>
-        <div class="badge bg-secondary" style="font-size: 0.7rem">
-          {{ currentUser.role | uppercase }}
+    <div class="d-flex align-items-center gap-3">
+      <div class="lang-buttons">
+        <button 
+          *ngFor="let lang of languages"
+          class="lang-btn"
+          [class.active]="currentLang === lang.code"
+          (click)="changeLanguage(lang.code)">
+          {{ lang.code | uppercase }}
+        </button>
+      </div>
+
+      <div *ngIf="currentUser">
+        <div class="text-white me-3 text-end d-none d-md-block">
+          <div class="fw-bold" style="font-size: 0.9rem">
+            {{ currentUser.nombre }} {{ currentUser.apellidos }}
+          </div>
+          <div class="badge bg-secondary" style="font-size: 0.7rem">
+            {{ currentUser.role | uppercase }}
+          </div>
         </div>
       </div>
 
-      <button class="btn btn-outline-danger btn-sm" (click)="logout()">
-        <i class="bi bi-box-arrow-right me-1"></i> Irten
+      <button *ngIf="currentUser" class="btn btn-outline-danger btn-sm" (click)="logout()">
+        <i class="bi bi-box-arrow-right me-1"></i> {{ 'NAV.LOGOUT' | translate }}
       </button>
     </div>
   </div>

@@ -1,0 +1,239 @@
+.centro-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Loading indicator */
+.loading-indicator {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+.loading-indicator .spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Filtros */
+.filters-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filters-section h6 {
+  margin-bottom: 0.75rem;
+  color: #495057;
+  font-weight: 600;
+}
+
+.filters-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 150px;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  background: white;
+}
+
+.filter-group select:disabled {
+  background: #e9ecef;
+  cursor: not-allowed;
+}
+
+.btn-clear {
+  padding: 0.5rem 1rem;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.btn-clear:hover {
+  background: #5a6268;
+}
+
+.filter-count {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* Mapa */
+.map-section {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: 1.5rem;
+}
+
+#map-container {
+  width: 100%;
+  height: 300px;
+}
+
+/* Centro seleccionado */
+.selected-centro {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #28a745;
+  margin-bottom: 1.5rem;
+}
+
+.selected-centro h6 {
+  color: #2e7d32;
+  margin-bottom: 0.5rem;
+}
+
+.centro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.centro-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1b5e20;
+}
+
+.centro-address,
+.centro-location,
+.centro-contact {
+  font-size: 0.875rem;
+  color: #4a4a4a;
+}
+
+.centro-location {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Lista de centros */
+.centros-list {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  margin-top: 0.5rem;
+}
+
+.centros-list h6 {
+  padding: 0.75rem 1rem;
+  margin: 0;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 8px 8px 0 0;
+}
+
+.list-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.centro-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.centro-item:hover {
+  background: #f8f9fa;
+}
+
+.centro-item.selected {
+  background: #e3f2fd;
+  border-left: 3px solid #1976d2;
+}
+
+.centro-item:last-child {
+  border-bottom: none;
+}
+
+.centro-item-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.centro-item-info {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.badge-public {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-private {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.badge-other {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters-row {
+    flex-direction: column;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  #map-container {
+    height: 200px;
+  }
+  
+  .centro-location {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

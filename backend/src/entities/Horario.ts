@@ -36,7 +36,6 @@ export class Horario {
   @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  // Relaciones
   @ManyToOne(() => User, (user) => user.horarios)
   @JoinColumn({ name: 'profe_id' })
   profesor: User;

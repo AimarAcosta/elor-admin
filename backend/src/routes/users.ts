@@ -7,7 +7,6 @@ const router = Router();
 const userRepository = () => AppDataSource.getRepository(User);
 const tipoRepository = () => AppDataSource.getRepository(Tipo);
 
-// GET /api/users/tipos/all - Obtener tipos de usuario (DEBE IR PRIMERO)
 router.get('/tipos/all', async (req, res) => {
   try {
     const tipos = await tipoRepository().find({ order: { id: 'ASC' } });
@@ -17,7 +16,6 @@ router.get('/tipos/all', async (req, res) => {
   }
 });
 
-// GET /api/users/count/students - Contar estudiantes (tipo_id = 4)
 router.get('/count/students', async (req, res) => {
   try {
     const count = await userRepository().count({ where: { tipo_id: 4 } });
@@ -27,7 +25,6 @@ router.get('/count/students', async (req, res) => {
   }
 });
 
-// GET /api/users/count/teachers - Contar profesores (tipo_id = 3)
 router.get('/count/teachers', async (req, res) => {
   try {
     const count = await userRepository().count({ where: { tipo_id: 3 } });
@@ -37,7 +34,6 @@ router.get('/count/teachers', async (req, res) => {
   }
 });
 
-// GET /api/users/count/all - Contar todos por tipo
 router.get('/count/all', async (req, res) => {
   try {
     const students = await userRepository().count({ where: { tipo_id: 4 } });
@@ -50,7 +46,6 @@ router.get('/count/all', async (req, res) => {
   }
 });
 
-// GET /api/users - Obtener todos los usuarios
 router.get('/', async (req, res) => {
   try {
     const users = await userRepository().find({
@@ -63,7 +58,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/users/role/:tipoId - Obtener usuarios por tipo
 router.get('/role/:tipoId', async (req, res) => {
   try {
     const users = await userRepository().find({
@@ -77,7 +71,6 @@ router.get('/role/:tipoId', async (req, res) => {
   }
 });
 
-// GET /api/users/search/:query - Buscar usuarios
 router.get('/search/:query', async (req, res) => {
   try {
     const query = req.params.query.toLowerCase();
@@ -95,7 +88,6 @@ router.get('/search/:query', async (req, res) => {
   }
 });
 
-// GET /api/users/:id - Obtener usuario por ID
 router.get('/:id', async (req, res) => {
   try {
     const user = await userRepository().findOne({
@@ -113,7 +105,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/users/login - Login
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -127,12 +118,10 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ error: 'Usuario no encontrado' });
     }
 
-    // Comparar contraseña (sin hash por ahora, como en la BD original)
     if (user.password !== password) {
       return res.status(401).json({ error: 'Contraseña incorrecta' });
     }
 
-    // No enviar la contraseña en la respuesta
     const { password: _, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   } catch (error) {
@@ -140,12 +129,10 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// POST /api/users - Crear usuario
 router.post('/', async (req, res) => {
   try {
     const { email, username, password, nombre, apellidos, dni, direccion, telefono1, telefono2, tipo_id } = req.body;
 
-    // Verificar si el usuario ya existe
     const existingUser = await userRepository().findOne({
       where: [{ username }, { email }],
     });
@@ -172,12 +159,10 @@ router.post('/', async (req, res) => {
     const { password: _, ...userWithoutPassword } = newUser;
     res.status(201).json(userWithoutPassword);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Error al crear usuario' });
   }
 });
 
-// PUT /api/users/:id - Actualizar usuario
 router.put('/:id', async (req, res) => {
   try {
     const user = await userRepository().findOne({
@@ -209,7 +194,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/users/:id - Eliminar usuario
 router.delete('/:id', async (req, res) => {
   try {
     const user = await userRepository().findOne({
@@ -221,7 +205,6 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
 
-    // No permitir eliminar god (tipo_id = 1)
     if (user.tipo_id === 1) {
       return res.status(403).json({ error: 'No se puede eliminar al usuario God' });
     }

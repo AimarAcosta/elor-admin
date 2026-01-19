@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { UsersService, User, Tipo } from '../../services/users';
 import { ReunionesService } from '../../services/meetings';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-home-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './home-admin.html',
   styleUrls: ['./home-admin.css']
 })
@@ -54,7 +55,6 @@ export class HomeAdmin implements OnInit {
 
   loadTipos() {
     this.usersService.getTipos().subscribe(tipos => {
-      // Admin no puede crear god (tipo_id = 1)
       this.tipos = tipos.filter(t => t.id !== 1);
       this.cdr.detectChanges();
     });
@@ -91,7 +91,6 @@ export class HomeAdmin implements OnInit {
   }
 
   onSubmit() {
-    // Admin no puede crear god (tipo_id = 1)
     if (this.userForm.tipo_id === 1) {
       alert('Ezin duzu Jainkorik sortu.');
       return;

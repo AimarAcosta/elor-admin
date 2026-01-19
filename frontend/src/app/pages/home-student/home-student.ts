@@ -6,11 +6,14 @@ import { HorariosService, Horario, WeekDay } from '../../services/schedule';
 import { ReunionesService, Reunion } from '../../services/meetings';
 import { UsersService, User } from '../../services/users';
 import { MatriculacionesService, Matriculacion } from '../../services/matriculaciones';
+import { CentroSelector } from '../../shared/centro-selector/centro-selector';
+import { Centro } from '../../services/centros';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-home-student',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CentroSelector, TranslatePipe],
   templateUrl: './home-student.html',
   styleUrls: ['./home-student.css']
 })
@@ -25,16 +28,18 @@ export class HomeStudent implements OnInit {
   teachers: User[] = []; 
   myMatriculacion: Matriculacion | null = null;
 
-  // Estadísticas
   pendingCount: number = 0;
   acceptedCount: number = 0;
   teacherCount: number = 0;
 
   showRequestForm: boolean = false;
+  showCentroSelector: boolean = false;
+  selectedCentro: Centro | null = null;
   newReunion: Partial<Reunion> = {
     titulo: '',
     asunto: '',
-    profesor_id: 0
+    profesor_id: 0,
+    id_centro: '15112' // Elorrieta por defecto
   };
 
   constructor(
@@ -48,10 +53,9 @@ export class HomeStudent implements OnInit {
 
   ngOnInit() {
     this.currentUser = this.authService.getUser();
-    console.log('HomeStudent - currentUser:', this.currentUser);
     this.initializeEmptyTable();
     this.loadTeachers();
-    this.loadSchedule(); // Siempre cargar horarios generales
+    this.loadSchedule();
 
     if (this.currentUser && this.currentUser.id) {
       this.loadMyReuniones();
@@ -59,24 +63,18 @@ export class HomeStudent implements OnInit {
   }
 
   loadMatriculacion() {
-    console.log('loadMatriculacion - userId:', this.currentUser.id);
-    // Cargar la matriculación del alumno para obtener su ciclo
     this.matriculacionesService.getMatriculacionesAlumno(this.currentUser.id).subscribe(matriculaciones => {
-      console.log('Matriculaciones:', matriculaciones);
       if (matriculaciones.length > 0) {
-        this.myMatriculacion = matriculaciones[0]; // Usar la más reciente
+        this.myMatriculacion = matriculaciones[0];
         this.loadScheduleByCiclo(this.myMatriculacion.ciclo_id);
       } else {
-        // Si no hay matriculación, cargar horarios generales
         this.loadSchedule();
       }
     });
   }
 
   loadTeachers() {
-    // Cargar profesores (tipo_id = 3)
     this.usersService.getUsersByTipo(3).subscribe(teachers => {
-      console.log('Teachers loaded:', teachers);
       this.teachers = teachers;
       this.teacherCount = teachers.length;
       this.cdr.detectChanges();
@@ -84,9 +82,7 @@ export class HomeStudent implements OnInit {
   }
 
   loadMyReuniones() {
-    console.log('loadMyReuniones - userId:', this.currentUser.id);
     this.reunionesService.getReunionesAlumno(this.currentUser.id).subscribe(reuniones => {
-      console.log('Reuniones loaded:', reuniones);
       this.myReuniones = reuniones;
       this.pendingCount = reuniones.filter(r => r.estado === 'pendiente').length;
       this.acceptedCount = reuniones.filter(r => r.estado === 'aceptada').length;
@@ -96,6 +92,19 @@ export class HomeStudent implements OnInit {
 
   toggleForm() {
     this.showRequestForm = !this.showRequestForm;
+    this.cdr.detectChanges();
+  }
+
+  toggleCentroSelector() {
+    this.showCentroSelector = !this.showCentroSelector;
+    this.cdr.detectChanges();
+  }
+
+  onCentroSelected(centro: Centro) {
+    this.selectedCentro = centro;
+    this.newReunion.id_centro = centro.CCODIGO;
+    this.showCentroSelector = false;
+    this.cdr.detectChanges();
   }
 
   submitRequest() {
@@ -111,15 +120,17 @@ export class HomeStudent implements OnInit {
       asunto: this.newReunion.asunto,
       profesor_id: Number(this.newReunion.profesor_id),
       alumno_id: this.currentUser.id,
-      id_centro: '15112' // Centro por defecto
+      id_centro: this.newReunion.id_centro || '15112'
     };
 
     this.reunionesService.createReunion(reunion).subscribe(result => {
       if (result) {
         alert('Eskaera bidalita! (Solicitud enviada)');
         this.showRequestForm = false;
+        this.showCentroSelector = false;
+        this.selectedCentro = null;
         this.loadMyReuniones(); 
-        this.newReunion = { titulo: '', asunto: '', profesor_id: 0 };
+        this.newReunion = { titulo: '', asunto: '', profesor_id: 0, id_centro: '15112' };
       } else {
         alert('Errorea eskaria bidaltzean (Error al enviar)');
       }
@@ -136,17 +147,13 @@ export class HomeStudent implements OnInit {
   }
 
   loadSchedule() {
-    // Los alumnos ven el horario general
-    console.log('loadSchedule - calling API');
     this.horariosService.getHorarios().subscribe(horarios => {
-      console.log('Horarios loaded:', horarios);
       this.fillTimeTable(horarios);
       this.cdr.detectChanges();
     });
   }
 
   loadScheduleByCiclo(cicloId: number) {
-    // Cargar horarios del ciclo del alumno
     this.horariosService.getHorarioCiclo(cicloId).subscribe(horarios => {
       this.fillTimeTable(horarios);
       this.cdr.detectChanges();

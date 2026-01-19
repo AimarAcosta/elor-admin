@@ -1,12 +1,14 @@
 ﻿<div class="container">
   <div class="row">
     <div class="col-12">
-      <h2><i class="bi bi-backpack-fill"></i> Ikaslearen Panela</h2>
-      <p>Kaixo, <strong>{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</strong>! Hemen zure ordutegia eta bilerak kudeatu ditzakezu.</p>
+      <h2><i class="bi bi-backpack-fill"></i> {{ 'HOME.STUDENT_PANEL' | translate }}</h2>
+      <p>
+        {{ 'COMMON.HELLO' | translate }}, <strong>{{ currentUser?.nombre }} {{ currentUser?.apellidos }}</strong
+        >! {{ 'HOME.WELCOME_MSG' | translate }}
+      </p>
     </div>
   </div>
 
-  <!-- Estadísticas -->
   <div class="row">
     <div class="col-md-4">
       <div class="card stat-card">
@@ -14,7 +16,7 @@
           <div class="icon-circle">
             <i class="bi bi-clock-history"></i>
           </div>
-          <h5>Onartzeke</h5>
+          <h5>{{ 'MEETING.PENDING' | translate }}</h5>
           <h2>{{ pendingCount }}</h2>
         </div>
       </div>
@@ -25,7 +27,7 @@
           <div class="icon-circle">
             <i class="bi bi-check-circle-fill"></i>
           </div>
-          <h5>Onartuta</h5>
+          <h5>{{ 'MEETING.ACCEPTED' | translate }}</h5>
           <h2>{{ acceptedCount }}</h2>
         </div>
       </div>
@@ -36,7 +38,7 @@
           <div class="icon-circle">
             <i class="bi bi-person-video3"></i>
           </div>
-          <h5>Irakasleak</h5>
+          <h5>{{ 'HOME.TEACHERS' | translate }}</h5>
           <h2>{{ teacherCount }}</h2>
         </div>
       </div>
@@ -48,11 +50,15 @@
       <div class="card">
         <div class="card-header">
           <div>
-            <h5><i class="bi bi-calendar-plus"></i> Bilera / Tutoretza Eskatu</h5>
+            <h5><i class="bi bi-calendar-plus"></i> {{ 'MEETING.REQUEST' | translate }}</h5>
           </div>
           <button (click)="toggleForm()">
-            <i class="bi" [class.bi-x-lg]="showRequestForm" [class.bi-plus-lg]="!showRequestForm"></i>
-            {{ showRequestForm ? 'Utzi' : 'Eskatu' }}
+            <i
+              class="bi"
+              [class.bi-x-lg]="showRequestForm"
+              [class.bi-plus-lg]="!showRequestForm"
+            ></i>
+            {{ showRequestForm ? ('MEETING.CLOSE' | translate) : ('MEETING.REQUEST' | translate) }}
           </button>
         </div>
 
@@ -60,7 +66,7 @@
           <form (ngSubmit)="submitRequest()">
             <div class="form-row">
               <div class="form-group">
-                <label>Norekin?</label>
+                <label>{{ 'MEETING.WITH' | translate }}</label>
                 <select [(ngModel)]="newReunion.profesor_id" name="profesor" required>
                   <option *ngFor="let t of teachers" [value]="t.id">
                     {{ t.nombre }} {{ t.apellidos }}
@@ -68,16 +74,46 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Izenburua</label>
-                <input type="text" [(ngModel)]="newReunion.titulo" name="titulo" required placeholder="Adib: Duda examen..." />
+                <label>{{ 'MEETING.TITLE' | translate }}</label>
+                <input
+                  type="text"
+                  [(ngModel)]="newReunion.titulo"
+                  name="titulo"
+                  required
+                  placeholder="Adib: Duda examen..."
+                />
               </div>
               <div class="form-group">
-                <label>Gaia</label>
+                <label>{{ 'MEETING.SUBJECT' | translate }}</label>
                 <textarea [(ngModel)]="newReunion.asunto" name="asunto" rows="2"></textarea>
               </div>
             </div>
+
+            <div class="centro-selection">
+              <label><i class="bi bi-geo-alt"></i> {{ 'MEETING.WHERE' | translate }}</label>
+              <div class="selected-centro-preview" *ngIf="selectedCentro">
+                <strong>{{ selectedCentro.DNOMBRE }}</strong>
+                <small>{{ selectedCentro.DMUNI }}, {{ selectedCentro.DTERRE }}</small>
+              </div>
+              <div class="selected-centro-preview" *ngIf="!selectedCentro">
+                <strong>CIFP ELORRIETA-ERREKA MARI LHII</strong>
+                <small>Bilbao, Bizkaia {{ 'MEETING.DEFAULT_CENTER' | translate }}</small>
+              </div>
+              <button type="button" class="btn-change-centro" (click)="toggleCentroSelector()">
+                <i class="bi bi-pin-map"></i> {{ showCentroSelector ? ('MEETING.CLOSE' | translate) : ('MEETING.CHANGE_CENTER' | translate) }}
+              </button>
+            </div>
+
+            <div *ngIf="showCentroSelector" class="centro-selector-container">
+              <app-centro-selector
+                [selectedCentroId]="newReunion.id_centro || '15112'"
+                (centroSelected)="onCentroSelected($event)"
+              >
+              </app-centro-selector>
+            </div>
+
             <div class="form-actions">
-              <button type="submit"><i class="bi bi-send"></i> Bidali Eskaera</button>
+              <button type="submit"><i class="bi bi-send"></i> {{ 'MEETING.SEND' | translate }}</button>
             </div>
           </form>
         </div>
@@ -85,27 +121,32 @@
     </div>
   </div>
 
-  <!-- Mis reuniones -->
   <div class="row">
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h5><i class="bi bi-clock-history"></i> Nire Bilerak</h5>
+          <h5><i class="bi bi-clock-history"></i> {{ 'HOME.MY_MEETINGS' | translate }}</h5>
         </div>
         <div class="card-body">
           <div *ngIf="myReuniones.length === 0" class="empty-state">
             <i class="bi bi-calendar-x"></i>
-            <p>Ez duzu bilerarik oraindik</p>
+            <p>{{ 'MEETING.NO_MEETINGS' | translate }}</p>
           </div>
           <ul class="meetings-list" *ngIf="myReuniones.length > 0">
             <li class="meeting-item" *ngFor="let m of myReuniones">
               <div class="meeting-content">
                 <span class="meeting-title">{{ m.titulo }}</span>
                 <small class="meeting-subtitle">
-                  {{ m.profesor?.nombre }} {{ m.profesor?.apellidos }} | {{ m.fecha | date : 'shortDate' }}
+                  {{ m.profesor?.nombre }} {{ m.profesor?.apellidos }} |
+                  {{ m.fecha | date : 'shortDate' }}
                 </small>
               </div>
-              <span class="badge" [class.status-pending]="m.estado === 'pendiente'" [class.status-approved]="m.estado === 'aceptada'" [class.status-rejected]="m.estado === 'denegada'">
+              <span
+                class="badge"
+                [class.status-pending]="m.estado === 'pendiente'"
+                [class.status-approved]="m.estado === 'aceptada'"
+                [class.status-rejected]="m.estado === 'denegada'"
+              >
                 {{ getEstadoEus(m.estado) | uppercase }}
               </span>
             </li>
@@ -119,15 +160,19 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h5><i class="bi bi-calendar-week"></i> Nire Ordutegia</h5>
+          <h5><i class="bi bi-calendar-week"></i> {{ 'SCHEDULE.MY_SCHEDULE' | translate }}</h5>
         </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="schedule-table">
               <thead>
                 <tr>
-                  <th>O</th>
-                  <th *ngFor="let day of daysEus">{{ day }}</th>
+                  <th>{{ 'SCHEDULE.HOUR' | translate }}</th>
+                  <th>{{ 'SCHEDULE.MONDAY' | translate }}</th>
+                  <th>{{ 'SCHEDULE.TUESDAY' | translate }}</th>
+                  <th>{{ 'SCHEDULE.WEDNESDAY' | translate }}</th>
+                  <th>{{ 'SCHEDULE.THURSDAY' | translate }}</th>
+                  <th>{{ 'SCHEDULE.FRIDAY' | translate }}</th>
                 </tr>
               </thead>
               <tbody>

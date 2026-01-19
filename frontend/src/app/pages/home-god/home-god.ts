@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { UsersService, User, Tipo } from '../../services/users';
 import { ReunionesService } from '../../services/meetings';
+import { TranslatePipe } from '../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-home-god',
   standalone: true,
-  imports: [CommonModule, FormsModule], 
+  imports: [CommonModule, FormsModule, TranslatePipe], 
   templateUrl: './home-god.html',
   styleUrls: ['./home-god.css']
 })
@@ -92,11 +93,11 @@ export class HomeGod implements OnInit {
   getEmptyUser(): Partial<User> {
     return {
       username: '',
-      password: '123456', 
+      password: '123456',
       nombre: '',
       apellidos: '',
       email: '',
-      tipo_id: 4 // Por defecto alumno
+      tipo_id: 4
     };
   }
 

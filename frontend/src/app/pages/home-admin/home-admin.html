@@ -1,8 +1,8 @@
 <div class="container">
   <div class="row">
     <div class="col-12">
-      <h2><i class="bi bi-briefcase-fill"></i>Idazkaritza Panela</h2>
-      <p>Ongi etorri sistemara. Kudeaketa orokorra</p>
+      <h2><i class="bi bi-briefcase-fill"></i>{{ 'HOME.ADMIN_PANEL' | translate }}</h2>
+      <p>{{ 'HOME.WELCOME_ADMIN' | translate }}</p>
     </div>
   </div>
 
@@ -13,7 +13,7 @@
           <div class="icon-circle">
             <i class="bi bi-mortarboard-fill"></i>
           </div>
-          <h5>Ikasleak</h5>
+          <h5>{{ 'HOME.STUDENTS' | translate }}</h5>
           <h2>{{ studentCount }}</h2>
         </div>
       </div>
@@ -24,7 +24,7 @@
           <div class="icon-circle">
             <i class="bi bi-person-video3"></i>
           </div>
-          <h5>Irakasleak</h5>
+          <h5>{{ 'HOME.TEACHERS' | translate }}</h5>
           <h2>{{ teacherCount }}</h2>
         </div>
       </div>
@@ -35,7 +35,7 @@
           <div class="icon-circle">
             <i class="bi bi-calendar-event-fill"></i>
           </div>
-          <h5>Gaurko Bilerak</h5>
+          <h5>{{ 'HOME.MEETINGS_TODAY' | translate }}</h5>
           <h2>{{ todayMeetings }}</h2>
         </div>
       </div>
@@ -46,54 +46,54 @@
     <div class="card-header">
       <h5>
         <i class="bi" [ngClass]="isEditing ? 'bi-pencil-square' : 'bi-plus-circle'"></i>
-        {{ isEditing ? 'Erabiltzailea Editatu' : 'Erabiltzaile Berria Sortu' }}
+        {{ isEditing ? ('USER.EDIT' | translate) : ('USER.CREATE' | translate) }}
       </h5>
     </div>
     <div class="card-body">
       <form (ngSubmit)="onSubmit()">
         <div class="row">
           <div class="col-md-6">
-            <label>Erabiltzailea</label>
+            <label>{{ 'USER.USERNAME' | translate }}</label>
             <input type="text" [(ngModel)]="userForm.username" name="username" required />
           </div>
 
           <div class="col-md-6">
-            <label>Email</label>
+            <label>{{ 'USER.EMAIL' | translate }}</label>
             <input type="email" [(ngModel)]="userForm.email" name="email" required />
           </div>
 
           <div class="col-md-6">
-            <label>Izena</label>
+            <label>{{ 'USER.NAME' | translate }}</label>
             <input type="text" [(ngModel)]="userForm.nombre" name="nombre" required />
           </div>
 
           <div class="col-md-6">
-            <label>Abizenak</label>
+            <label>{{ 'USER.SURNAME' | translate }}</label>
             <input type="text" [(ngModel)]="userForm.apellidos" name="apellidos" required />
           </div>
 
           <div class="col-md-6">
-            <label>Rola</label>
+            <label>{{ 'USER.ROLE' | translate }}</label>
             <select [(ngModel)]="userForm.tipo_id" name="tipo_id" required>
-              <option [value]="3">Irakaslea</option>
-              <option [value]="4">Ikaslea</option>
+              <option [value]="3">{{ 'USER.TEACHER' | translate }}</option>
+              <option [value]="4">{{ 'USER.STUDENT' | translate }}</option>
             </select>
           </div>
 
           <div class="col-md-6">
-            <label>DNI</label>
+            <label>{{ 'USER.DNI' | translate }}</label>
             <input type="text" [(ngModel)]="userForm.dni" name="dni" />
           </div>
 
           <div class="col-md-6">
-            <label>Telefonoa</label>
+            <label>{{ 'USER.PHONE' | translate }}</label>
             <input type="text" [(ngModel)]="userForm.telefono1" name="telefono1" />
           </div>
         </div>
 
         <div class="form-actions">
-          <button type="button" (click)="cancelForm()">Utzi</button>
-          <button type="submit">Gorde</button>
+          <button type="button" (click)="cancelForm()">{{ 'USER.CANCEL' | translate }}</button>
+          <button type="submit">{{ 'USER.SAVE' | translate }}</button>
         </div>
       </form>
     </div>
@@ -103,19 +103,19 @@
     <div class="col-12">
       <div class="card">
         <div class="card-header">
-          <h5><i class="bi bi-people-fill"></i>Erabiltzaile Zerrenda</h5>
+          <h5><i class="bi bi-people-fill"></i>{{ 'USER.USER_LIST' | translate }}</h5>
           <div class="header-actions">
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-search"></i></span>
               <input
                 type="text"
-                placeholder="Bilatu erabiltzailea..."
+                [placeholder]="'USER.SEARCH' | translate"
                 [(ngModel)]="searchTerm"
                 (input)="filterUsers()"
               />
             </div>
             <button (click)="openCreateForm()" *ngIf="!showForm">
-              <i class="bi bi-plus-lg"></i> Berria
+              <i class="bi bi-plus-lg"></i> {{ 'USER.NEW' | translate }}
             </button>
           </div>
         </div>
@@ -125,10 +125,10 @@
             <table>
               <thead>
                 <tr>
-                  <th>Erabiltzailea</th>
-                  <th>Izena / Abizenak</th>
-                  <th>Rola</th>
-                  <th>Ekintzak</th>
+                  <th>{{ 'USER.USERNAME' | translate }}</th>
+                  <th>{{ 'USER.NAME' | translate }} / {{ 'USER.SURNAME' | translate }}</th>
+                  <th>{{ 'USER.ROLE' | translate }}</th>
+                  <th>{{ 'MEETING.ACTIONS' | translate }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -151,22 +151,22 @@
 
                   <td>
                     <ng-container *ngIf="user.tipo_id !== 1 && user.tipo_id !== 2">
-                      <button (click)="openEditForm(user)" title="Editatu">
+                      <button (click)="openEditForm(user)" [title]="'USER.EDIT' | translate">
                         <i class="bi bi-pencil"></i>
                       </button>
-                      <button (click)="onDeleteUser(user.id)" title="Ezabatu">
+                      <button (click)="onDeleteUser(user.id)" [title]="'USER.DELETE' | translate">
                         <i class="bi bi-trash"></i>
                       </button>
                     </ng-container>
                     <span *ngIf="user.tipo_id === 1 || user.tipo_id === 2">
-                      <i class="bi bi-lock-fill"></i> Babestuta
+                      <i class="bi bi-lock-fill"></i> {{ 'USER.PROTECTED' | translate }}
                     </span>
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <div *ngIf="filteredUsers.length === 0">Ez da erabiltzailerik aurkitu.</div>
+            <div *ngIf="filteredUsers.length === 0">{{ 'USER.NO_USERS_FOUND' | translate }}</div>
           </div>
         </div>
       </div>

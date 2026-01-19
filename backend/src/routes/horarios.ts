@@ -5,7 +5,6 @@ import { Horario } from '../entities/Horario';
 const router = Router();
 const horarioRepository = () => AppDataSource.getRepository(Horario);
 
-// GET /api/horarios - Obtener todos los horarios
 router.get('/', async (req, res) => {
   try {
     const horarios = await horarioRepository().find({
@@ -18,7 +17,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/horarios/profesor/:id - Obtener horario de un profesor
 router.get('/profesor/:id', async (req, res) => {
   try {
     const horarios = await horarioRepository().find({
@@ -32,7 +30,6 @@ router.get('/profesor/:id', async (req, res) => {
   }
 });
 
-// GET /api/horarios/aula/:aula - Obtener horario de un aula
 router.get('/aula/:aula', async (req, res) => {
   try {
     const horarios = await horarioRepository().find({
@@ -46,14 +43,12 @@ router.get('/aula/:aula', async (req, res) => {
   }
 });
 
-// GET /api/horarios/ciclo/:id - Obtener horarios de un ciclo
 router.get('/ciclo/:id', async (req, res) => {
   try {
     const horarios = await horarioRepository().find({
       relations: ['profesor', 'modulo', 'modulo.ciclo'],
       order: { dia: 'ASC', hora: 'ASC' },
     });
-    // Filtrar por ciclo_id del módulo
     const cicloId = parseInt(req.params.id);
     const filteredHorarios = horarios.filter(h => h.modulo?.ciclo_id === cicloId);
     res.json(filteredHorarios);
@@ -62,7 +57,6 @@ router.get('/ciclo/:id', async (req, res) => {
   }
 });
 
-// GET /api/horarios/:id - Obtener horario por ID
 router.get('/:id', async (req, res) => {
   try {
     const horario = await horarioRepository().findOne({
@@ -80,7 +74,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/horarios - Crear entrada de horario
 router.post('/', async (req, res) => {
   try {
     const { dia, hora, profe_id, modulo_id, aula, observaciones } = req.body;
@@ -97,12 +90,10 @@ router.post('/', async (req, res) => {
     await horarioRepository().save(newHorario);
     res.status(201).json(newHorario);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Error al crear horario' });
   }
 });
 
-// PUT /api/horarios/:id - Actualizar entrada de horario
 router.put('/:id', async (req, res) => {
   try {
     const horario = await horarioRepository().findOne({
@@ -129,7 +120,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/horarios/:id - Eliminar entrada de horario
 router.delete('/:id', async (req, res) => {
   try {
     const horario = await horarioRepository().findOne({

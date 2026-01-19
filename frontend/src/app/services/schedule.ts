@@ -44,138 +44,85 @@ export class HorariosService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todos los horarios
   getHorarios(): Observable<Horario[]> {
     return this.http.get<Horario[]>(this.apiUrl).pipe(
-      catchError((error) => {
-        console.error('Error al obtener horarios:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener horario por ID
   getHorarioById(id: number): Observable<Horario | undefined> {
     return this.http.get<Horario>(`${this.apiUrl}/${id}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener horario:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Obtener horario de un profesor
   getHorarioProfesor(profesorId: number): Observable<Horario[]> {
     return this.http.get<Horario[]>(`${this.apiUrl}/profesor/${profesorId}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener horario del profesor:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener horario de un aula
   getHorarioAula(aula: string): Observable<Horario[]> {
     return this.http.get<Horario[]>(`${this.apiUrl}/aula/${aula}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener horario del aula:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener horarios de un ciclo
   getHorarioCiclo(cicloId: number): Observable<Horario[]> {
     return this.http.get<Horario[]>(`${this.apiUrl}/ciclo/${cicloId}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener horarios del ciclo:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Crear horario
   createHorario(horario: Partial<Horario>): Observable<Horario | undefined> {
     return this.http.post<Horario>(this.apiUrl, horario).pipe(
-      catchError((error) => {
-        console.error('Error al crear horario:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Actualizar horario
   updateHorario(id: number, data: Partial<Horario>): Observable<Horario | undefined> {
     return this.http.put<Horario>(`${this.apiUrl}/${id}`, data).pipe(
-      catchError((error) => {
-        console.error('Error al actualizar horario:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Eliminar horario
   deleteHorario(id: number): Observable<boolean> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`).pipe(
       map(() => true),
-      catchError((error) => {
-        console.error('Error al eliminar horario:', error);
-        return of(false);
-      })
+      catchError(() => of(false))
     );
   }
 
-  // Obtener todos los módulos
   getModulos(): Observable<Modulo[]> {
     return this.http.get<Modulo[]>(this.modulosUrl).pipe(
-      catchError((error) => {
-        console.error('Error al obtener módulos:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener módulo por ID
   getModuloById(id: number): Observable<Modulo | undefined> {
     return this.http.get<Modulo>(`${this.modulosUrl}/${id}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener módulo:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Obtener módulos por ciclo
   getModulosByCiclo(cicloId: number): Observable<Modulo[]> {
     return this.http.get<Modulo[]>(`${this.modulosUrl}/ciclo/${cicloId}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener módulos del ciclo:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener todos los ciclos
   getCiclos(): Observable<Ciclo[]> {
     return this.http.get<Ciclo[]>(this.ciclosUrl).pipe(
-      catchError((error) => {
-        console.error('Error al obtener ciclos:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener ciclo por ID
   getCicloById(id: number): Observable<Ciclo | undefined> {
     return this.http.get<Ciclo>(`${this.ciclosUrl}/${id}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener ciclo:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Helper: Traducir día a euskera
   getDiaEus(dia: WeekDay): string {
     const map: Record<WeekDay, string> = {
       'LUNES': 'ASTELEHENA',

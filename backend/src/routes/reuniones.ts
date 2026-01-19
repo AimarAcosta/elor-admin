@@ -6,7 +6,6 @@ import { Between, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
 const router = Router();
 const reunionRepository = () => AppDataSource.getRepository(Reunion);
 
-// GET /api/reuniones/today/count - Contar reuniones de hoy
 router.get('/today/count', async (req, res) => {
   try {
     const today = new Date();
@@ -24,7 +23,6 @@ router.get('/today/count', async (req, res) => {
   }
 });
 
-// GET /api/reuniones - Obtener todas las reuniones
 router.get('/', async (req, res) => {
   try {
     const reuniones = await reunionRepository().find({
@@ -37,7 +35,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/reuniones/profesor/:id - Obtener reuniones de un profesor
 router.get('/profesor/:id', async (req, res) => {
   try {
     const reuniones = await reunionRepository().find({
@@ -51,7 +48,6 @@ router.get('/profesor/:id', async (req, res) => {
   }
 });
 
-// GET /api/reuniones/alumno/:id - Obtener reuniones de un alumno
 router.get('/alumno/:id', async (req, res) => {
   try {
     const reuniones = await reunionRepository().find({
@@ -65,7 +61,6 @@ router.get('/alumno/:id', async (req, res) => {
   }
 });
 
-// GET /api/reuniones/:id - Obtener reunión por ID
 router.get('/:id', async (req, res) => {
   try {
     const reunion = await reunionRepository().findOne({
@@ -83,7 +78,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/reuniones - Crear reunión
 router.post('/', async (req, res) => {
   try {
     const { titulo, asunto, fecha, profesor_id, alumno_id, id_centro, aula, estado } = req.body;
@@ -102,12 +96,10 @@ router.post('/', async (req, res) => {
     await reunionRepository().save(newReunion);
     res.status(201).json(newReunion);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Error al crear reunión' });
   }
 });
 
-// PUT /api/reuniones/:id - Actualizar reunión
 router.put('/:id', async (req, res) => {
   try {
     const reunion = await reunionRepository().findOne({
@@ -135,7 +127,6 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/reuniones/:id - Eliminar reunión
 router.delete('/:id', async (req, res) => {
   try {
     const reunion = await reunionRepository().findOne({

@@ -32,89 +32,56 @@ export class ReunionesService {
 
   constructor(private http: HttpClient) {}
 
-  // Obtener todas las reuniones
   getReuniones(): Observable<Reunion[]> {
     return this.http.get<Reunion[]>(this.apiUrl).pipe(
-      catchError((error) => {
-        console.error('Error al obtener reuniones:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener reunión por ID
   getReunionById(id: number): Observable<Reunion | undefined> {
     return this.http.get<Reunion>(`${this.apiUrl}/${id}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener reunión:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Obtener reuniones de un profesor
   getReunionesProfesor(profesorId: number): Observable<Reunion[]> {
     return this.http.get<Reunion[]>(`${this.apiUrl}/profesor/${profesorId}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener reuniones del profesor:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Obtener reuniones de un alumno
   getReunionesAlumno(alumnoId: number): Observable<Reunion[]> {
     return this.http.get<Reunion[]>(`${this.apiUrl}/alumno/${alumnoId}`).pipe(
-      catchError((error) => {
-        console.error('Error al obtener reuniones del alumno:', error);
-        return of([]);
-      })
+      catchError(() => of([]))
     );
   }
 
-  // Contar reuniones de hoy
   getTodayCount(): Observable<number> {
     return this.http.get<{ count: number }>(`${this.apiUrl}/today/count`).pipe(
       map((res) => res.count),
-      catchError((error) => {
-        console.error('Error al contar reuniones de hoy:', error);
-        return of(0);
-      })
+      catchError(() => of(0))
     );
   }
 
-  // Crear reunión
   createReunion(reunion: Partial<Reunion>): Observable<Reunion | undefined> {
     return this.http.post<Reunion>(this.apiUrl, reunion).pipe(
-      catchError((error) => {
-        console.error('Error al crear reunión:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Actualizar reunión
   updateReunion(id: number, data: Partial<Reunion>): Observable<Reunion | undefined> {
     return this.http.put<Reunion>(`${this.apiUrl}/${id}`, data).pipe(
-      catchError((error) => {
-        console.error('Error al actualizar reunión:', error);
-        return of(undefined);
-      })
+      catchError(() => of(undefined))
     );
   }
 
-  // Eliminar reunión
   deleteReunion(id: number): Observable<boolean> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`).pipe(
       map(() => true),
-      catchError((error) => {
-        console.error('Error al eliminar reunión:', error);
-        return of(false);
-      })
+      catchError(() => of(false))
     );
   }
 
-  // Helper para traducir estado
   getEstadoEus(estado: ReunionEstado): ReunionEstadoEus {
     const map: Record<ReunionEstado, ReunionEstadoEus> = {
       pendiente: 'onartzeke',

@@ -1,0 +1,86 @@
+<div class="centro-selector">
+  <div *ngIf="isLoading" class="loading-indicator">
+    <i class="bi bi-hourglass-split spinning"></i> Zentroak kargatzen...
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div class="filters-section">
+      <h6><i class="bi bi-funnel"></i> Iragazi Zentroak</h6>
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Mota (DTITUC)</label>
+          <select [(ngModel)]="filterTipo" (change)="applyFilters()">
+            <option value="">Guztiak</option>
+            <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Lurraldea (DTERRE)</label>
+          <select [(ngModel)]="filterTerritorio" (change)="onTerritorioChange()">
+            <option value="">Guztiak</option>
+            <option *ngFor="let terr of territorios" [value]="terr">{{ terr }}</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label>Udalerria (DMUNI)</label>
+          <select [(ngModel)]="filterMunicipio" (change)="applyFilters()" [disabled]="!filterTerritorio">
+            <option value="">Guztiak</option>
+            <option *ngFor="let muni of municipios" [value]="muni">{{ muni }}</option>
+          </select>
+        </div>
+        
+        <button class="btn-clear" (click)="clearFilters()">
+          <i class="bi bi-x-circle"></i> Garbitu
+        </button>
+      </div>
+      
+      <div class="filter-count">
+        <i class="bi bi-building"></i> {{ filteredCentros.length }} zentro aurkitu
+      </div>
+    </div>
+
+    <div class="map-section">
+      <div id="map-container"></div>
+    </div>
+
+    <div class="selected-centro" *ngIf="selectedCentro">
+      <h6><i class="bi bi-geo-alt-fill"></i> Hautatutako Zentroa</h6>
+      <div class="centro-info">
+        <div class="centro-name">{{ selectedCentro.DNOMBRE }}</div>
+        <div class="centro-address">
+          <i class="bi bi-pin-map"></i> {{ selectedCentro.DDOMICILIO }}
+        </div>
+        <div class="centro-location">
+          <span><i class="bi bi-mailbox"></i> {{ selectedCentro.CPOSTAL }}</span>
+          <span><i class="bi bi-geo"></i> {{ selectedCentro.DMUNI }}, {{ selectedCentro.DTERRE }}</span>
+        </div>
+        <div class="centro-contact" *ngIf="selectedCentro.TELEFONO">
+          <i class="bi bi-telephone"></i> {{ selectedCentro.TELEFONO }}
+        </div>
+      </div>
+    </div>
+
+    <div class="centros-list">
+      <h6><i class="bi bi-list-ul"></i> Zentroen Zerrenda</h6>
+      <div class="list-container">
+        <div 
+          *ngFor="let centro of filteredCentros" 
+          class="centro-item"
+          [class.selected]="centro.CCODIGO === selectedCentroId"
+          (click)="selectCentro(centro)">
+          <div class="centro-item-name">{{ centro.DNOMBRE }}</div>
+          <div class="centro-item-info">
+            <span class="badge" [class.badge-public]="centro.DTITUC === 'Publico'" 
+                               [class.badge-private]="centro.DTITUC === 'Privado'"
+                               [class.badge-other]="centro.DTITUC === 'Otro publico'">
+              {{ centro.DTITUC }}
+            </span>
+            <span>{{ centro.DMUNI }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

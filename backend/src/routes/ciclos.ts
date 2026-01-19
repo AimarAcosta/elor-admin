@@ -5,7 +5,6 @@ import { Ciclo } from '../entities/Ciclo';
 const router = Router();
 const cicloRepository = () => AppDataSource.getRepository(Ciclo);
 
-// GET /api/ciclos - Obtener todos los ciclos
 router.get('/', async (req, res) => {
   try {
     const ciclos = await cicloRepository().find({
@@ -17,7 +16,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/ciclos/:id - Obtener ciclo por ID
 router.get('/:id', async (req, res) => {
   try {
     const ciclo = await cicloRepository().findOne({

@@ -5,7 +5,6 @@ import { Matriculacion } from '../entities/Matriculacion';
 const router = Router();
 const matriculacionRepository = () => AppDataSource.getRepository(Matriculacion);
 
-// GET /api/matriculaciones - Obtener todas las matriculaciones
 router.get('/', async (req, res) => {
   try {
     const matriculaciones = await matriculacionRepository().find({
@@ -18,7 +17,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /api/matriculaciones/alumno/:id - Obtener matriculaciones de un alumno
 router.get('/alumno/:id', async (req, res) => {
   try {
     const matriculaciones = await matriculacionRepository().find({
@@ -32,7 +30,6 @@ router.get('/alumno/:id', async (req, res) => {
   }
 });
 
-// GET /api/matriculaciones/ciclo/:id - Obtener matriculaciones de un ciclo
 router.get('/ciclo/:id', async (req, res) => {
   try {
     const matriculaciones = await matriculacionRepository().find({
@@ -46,7 +43,6 @@ router.get('/ciclo/:id', async (req, res) => {
   }
 });
 
-// GET /api/matriculaciones/:id - Obtener matriculación por ID
 router.get('/:id', async (req, res) => {
   try {
     const matriculacion = await matriculacionRepository().findOne({
@@ -64,7 +60,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// POST /api/matriculaciones - Crear matriculación
 router.post('/', async (req, res) => {
   try {
     const { alum_id, ciclo_id, curso, fecha } = req.body;
@@ -79,12 +74,10 @@ router.post('/', async (req, res) => {
     await matriculacionRepository().save(newMatriculacion);
     res.status(201).json(newMatriculacion);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: 'Error al crear matriculación' });
   }
 });
 
-// DELETE /api/matriculaciones/:id - Eliminar matriculación
 router.delete('/:id', async (req, res) => {
   try {
     const matriculacion = await matriculacionRepository().findOne({

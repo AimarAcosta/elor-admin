@@ -16,14 +16,11 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Servir imágenes de usuarios desde public/
 app.use('/public', express.static(path.join(__dirname, '../../public')));
 
-// Rutas de la API
 app.use('/api/users', usersRouter);
 app.use('/api/reuniones', reunionesRouter);
 app.use('/api/horarios', horariosRouter);
@@ -31,12 +28,10 @@ app.use('/api/modulos', modulosRouter);
 app.use('/api/ciclos', ciclosRouter);
 app.use('/api/matriculaciones', matriculacionesRouter);
 
-// Ruta de health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'ElorServ API está funcionando' });
 });
 
-// Inicializar conexión a la base de datos y servidor
 AppDataSource.initialize()
   .then(() => {
     console.log('✅ Conexión a MySQL establecida correctamente');
